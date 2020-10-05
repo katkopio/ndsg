@@ -98,8 +98,8 @@ def speed_violation(gps_data, type, speed_limit, time):
     return list_violations
 
 def main():
-    # gpx_file_location = open('datasets/ds1.gpx', 'r')
-    gpx_file_location = open('datasets/ds2.gpx', 'r')
+    # gpx_file_location = open('./Datasets/ds1_out.gpx', 'r')
+    gpx_file_location = open('./Datasets/20200924.gpx', 'r')
 
     gps_data = parse_gpx_file(gpx_file_location)
     distance = total_distance(gps_data)
