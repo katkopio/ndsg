@@ -1,6 +1,5 @@
 # CS 198/199 NDSG
-Katrina Kopio
-Makki Villaluz
+Katrina Kopio & Makki Villaluz
 
 ## Creating Virtual Environment
 ```
