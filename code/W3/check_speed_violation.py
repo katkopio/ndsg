@@ -1,3 +1,4 @@
+from pathlib import Path
 from haversine import haversine
 import gpxpy
 import gpxpy.gpx
@@ -80,7 +81,7 @@ def speed_violation(gps_data, type, speed_limit, time):
 
         if(speed >= speed_limit):
             speeding = True
-            time_elapsed += (time1 - time0).seconds
+            time_elapsed += time1.timestamp() - time0.timestamp()
 
             if (first_point == True):
                 starting_point = gps_data[i]
@@ -98,8 +99,9 @@ def speed_violation(gps_data, type, speed_limit, time):
     return list_violations
 
 def main():
-    # gpx_file_location = open('./Datasets/ds1_out.gpx', 'r')
-    gpx_file_location = open('./Datasets/20200924.gpx', 'r')
+    d_path = str(Path().resolve().parent)
+    # gpx_file_location = open(d_path + '/Datasets/ds1_out.gpx', 'r')
+    gpx_file_location = open(d_path + '/Datasets/20200924.gpx', 'r')
 
     gps_data = parse_gpx_file(gpx_file_location)
     distance = total_distance(gps_data)
