@@ -1,4 +1,3 @@
-from pathlib import Path
 from haversine import haversine
 import gpxpy
 import gpxpy.gpx
@@ -46,7 +45,7 @@ def speed_between_points(lon1, lat1, time1, lon2, lat2, time2):
     """
     Given 2 GPS points, calculate the speed between them
     """
-    d_time = sec_to_hour((time2 - time1).seconds)
+    d_time = sec_to_hour(time2.timestamp() - time1.timestamp())
     d_distance = haversine((lat1, lon1), (lat2, lon2))
     return d_distance / d_time
 
@@ -99,9 +98,8 @@ def speed_violation(gps_data, type, speed_limit, time):
     return list_violations
 
 def main():
-    d_path = str(Path().resolve().parent)
-    # gpx_file_location = open(d_path + '/Datasets/ds1_out.gpx', 'r')
-    gpx_file_location = open(d_path + '/Datasets/20200924.gpx', 'r')
+    gpx_file_location = open('../Datasets/ds1_out.gpx', 'r')
+    # gpx_file_location = open('../Datasets/20200924.gpx', 'r')
 
     gps_data = parse_gpx_file(gpx_file_location)
     distance = total_distance(gps_data)
