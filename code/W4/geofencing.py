@@ -22,8 +22,8 @@ def parse_gpx_file(gpx_file_location):
 
     return unique_points
 
-def geofencing(gps_data, min_limit, max_time):
-    fence = Polygon([(14.654681, 121.058387), (14.654681, 121.058661), (14.654956, 121.058661), (14.654956, 121.058387)])
+def geofencing(gps_data, min_limit, max_time, point1, point2):
+    fence = Polygon([point1, point2, (point1[0], point2[1]), (point2[0], point1[1])])
     index_start = -1
     results = []
 
@@ -69,9 +69,13 @@ def geofencing(gps_data, min_limit, max_time):
 def main(min_time, max_time):
     gpx_file_location = open('../Datasets/ds1_out.gpx', 'r')
     # gpx_file_location = open('../Datasets/20200924.gpx', 'r')
+    
+    # For Dataset 1
+    point1 = (14.654681, 121.058387)
+    point2 = (14.654956, 121.058661)
 
     gps_data = parse_gpx_file(gpx_file_location)
-    results = geofencing(gps_data, min_time, max_time)
+    results = geofencing(gps_data, min_time, max_time, point1, point2)
 
     for result in results:
         print(result.get('violation'))
