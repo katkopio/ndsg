@@ -4,7 +4,7 @@ Katrina Kopio & Makki Villaluz
 ## Creating Virtual Environment
 ```
 cd code
-virtual env <folder>
+virtualenv <folder>
 source <folder>/bin/activate
 ```
 
