@@ -23,6 +23,15 @@ def parse_gpx_file(gpx_file_location):
     return unique_points
 
 def liveness(gps_data, time_limit):
+    """
+    Determines total "aliveness" time of a vehicle. The
+    vehicle is considered "alive" if the gaps between
+    GPS readings are less than given {time_limit}.
+    Input:  gps_data (array of dictionaries)
+            time_limit (in seconds)
+    Output: total_liveness (in seconds)
+            results (array of dictionaries)
+    """
     results = []
     total_liveness = 0
     start_index = 0
@@ -70,3 +79,5 @@ def main(time_limit):
 
 if __name__ == "__main__":
     main(int(sys.argv[1]))
+
+# Run with `python3 liveness.py {time_limit}`
