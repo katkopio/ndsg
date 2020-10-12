@@ -4,6 +4,10 @@
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xmlns="http://www.topografix.com/GPX/1/0"
  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<!-- <wpt lat="14.654681" lon="121.058387"></wpt>
+<wpt lat="14.654681" lon="121.058661"></wpt>
+<wpt lat="14.654956" lon="121.058661"></wpt>
+<wpt lat="14.654956" lon="121.058387"></wpt> -->
 <trk>
 <number>1</number>
 <trkseg>
