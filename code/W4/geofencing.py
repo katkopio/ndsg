@@ -23,7 +23,7 @@ def parse_gpx_file(gpx_file_location):
     return unique_points
 
 def geofencing(gps_data, min_limit, max_time, point1, point2):
-    fence = Polygon([point1, point2, (point1[0], point2[1]), (point2[0], point1[1])])
+    fence = Polygon([point1, (point1[0], point2[1]), point2, (point2[0], point1[1])])
     index_start = -1
     results = []
 
