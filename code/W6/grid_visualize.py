@@ -1,7 +1,7 @@
 import gpxpy
 import sys
 
-def main(file, side_length):
+def visualize(file, side_length):
     point1 = (14.65498, 121.05837) # top left pt
     point2 = (14.64259, 121.07483) # bottom right pt
 
@@ -46,6 +46,9 @@ def main(file, side_length):
         f.write(gpx.to_xml())
 
 if __name__ == '__main__':
-    main(sys.argv[1], float(sys.argv[2]))
+    visualize(sys.argv[1], float(sys.argv[2]))
 
 # to run use 'python grid_visualize.py <ds1_time file> <grid cell size in km>'
+# Given GPX file and grid cell size, outputs GPX file with embedded grid size
+# Input ds1_times/<ds1 file>, grid cell size
+# Output ds1_grids/ds1_grid_<grid size, time freq>.gpx

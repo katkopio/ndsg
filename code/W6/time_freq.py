@@ -1,7 +1,7 @@
 import gpxpy
 import sys
 
-def main(time_diff):
+def time_freq(time_diff):
     gpx = gpxpy.gpx.GPX()
 
     gpx_track = gpxpy.gpx.GPXTrack()
@@ -28,6 +28,9 @@ def main(time_diff):
         f.write(gpx.to_xml())
 
 if __name__ == '__main__':
-    main(int(sys.argv[1]))
+    time_freq(int(sys.argv[1]))
 
 # to run use 'python time_freq.py <time interval between gps logs in seconds>'
+# Given interval, chops up base.gpx file
+# Input ds1_times/base.gpx
+# Output ds1_times/ds1_time_<time>s.gpx

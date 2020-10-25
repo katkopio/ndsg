@@ -125,3 +125,6 @@ if __name__ == '__main__':
     main(sys.argv[1], float(sys.argv[2]))
 
 # to run use 'python grid_size.py <ds1_time file> <grid cell size in km>'
+# Given a GPX file, and a grid cell size, outputs the results of our algo
+# Input ds1_times/<ds1file>.gpx
+# Output: Results of given ds1file
