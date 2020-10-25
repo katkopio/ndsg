@@ -45,7 +45,12 @@ def analyze_gpx(time_interval, distance_interval):
             end = datetime.datetime.now().timestamp()
 
             time = "{:7.6f}".format(end - start)
-            print(f"{t},{d},{vehicle_route},{set_route},{loops},{time}")
+            if loops == 2:
+                accuracy = True
+            else:
+                accuracy = False
+            
+            print(f"{t}s {d}km,{t},{d},{loops},{time},{accuracy}")
 
 if __name__ == '__main__':
     time_interval = [i for i in range(10, 130, 10)]
@@ -54,7 +59,7 @@ if __name__ == '__main__':
     # generate_time_files(time_interval)
     # generate_grids(time_interval, distance_interval)
 
-    print("time_interval,grid_distance,vehicle_route,set_route,num_loops,time")
+    print("desc,time_interval,grid_distance,num_loops,time,accuracy")
     analyze_gpx(time_interval, distance_interval)
 
 # run with python3 script.py > out.txt
