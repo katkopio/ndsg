@@ -47,7 +47,7 @@ def generate_grid_fence(grid_pts):
     grid_fence = []
 
     for y in range(len(grid_pts)-1):
-        for x in range(len(grid_pts)-1):
+        for x in range(len(grid_pts[0])-1):
             top_left_pt = grid_pts[y][x]
             top_right_pt = grid_pts[y][x+1]
             bottom_left_pt = grid_pts[y+1][x]
