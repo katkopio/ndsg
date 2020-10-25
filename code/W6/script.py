@@ -56,3 +56,6 @@ if __name__ == '__main__':
 
     print("time_interval,grid_distance,vehicle_route,set_route,num_loops,time")
     analyze_gpx(time_interval, distance_interval)
+
+# run with python3 script.py > out.txt
+# else, will print in terminal
