@@ -1,13 +1,16 @@
+import os
 from flask import Flask
 from flask_pymongo import PyMongo
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = '824fb3bf0f538824c22fe8b8e26a2596'
 app.config["MONGO_URI"] = "mongodb+srv://admin:azR4ENUNm1FPH4pj@project2.sqrmt.mongodb.net/Project2?retryWrites=true&w=majority"
-db = PyMongo(app)
+mongo = PyMongo(app)
 
 info = {
     "total_distance": [
         "Total Distance Travelled", 
+        # "Uses the Haversine formula to calculate the total distance travelled given a GPX file.",
         "It was the first Nelvana-produced series to air on PBS before the Bookworm Bunch and Cyberchase. In 2017, on the 20th anniversary of the series' cancellation, a sequel series titled The Magic School Bus Rides Again premiered on Netflix."],
     "speeding": [
         "Speeding Violation Detector", 

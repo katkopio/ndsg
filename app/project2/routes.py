@@ -1,7 +1,6 @@
 from flask import render_template, url_for, flash, redirect, request
-from project2 import app, db, info
-# from project2.forms import 
-# from project2.models import 
+from project2 import app, mongo, info
+from project2.forms import InputGPXFileForm
 
 @app.route("/")
 @app.route("/home")
@@ -12,9 +11,13 @@ def home():
 def features():
     return render_template('features.html', title='Features', info = info.items())
 
-@app.route("/features/total_distance")
+@app.route("/features/total_distance", methods=['GET','POST'])
 def total_distance():
-    return render_template('total_distance.html', title='Total Distance', info = info.get("total_distance"))
+    form = InputGPXFileForm()
+    if request.method == 'POST' and form.validate_on_submit():
+        gpx_file = request.files['gpx_file']
+        # put analysis here
+    return render_template('total_distance.html', title='Total Distance', info = info.get("total_distance"), form=form)
 
 @app.route("/features/speeding")
 def speeding():

@@ -12,8 +12,27 @@
     </div>
     
     <div class="container">
-        <h3>Place feature here</h3>
-        <hr>
+        <form method=POST enctype=multipart/form-data action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Input GPX File</legend>
+            <div class="form-group">
+                {% if form.gpx_file.errors %}
+                    {{ form.gpx_file(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.gpx_file.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.gpx_file(class="form-check-label") }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+    <hr>
     </div> 
 </main>
 

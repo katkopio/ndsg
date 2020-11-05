@@ -1,8 +1,12 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
+from wtforms import SubmitField
+from wtforms.validators import DataRequired#, Length, Email, EqualTo, ValidationError
 # from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, SelectField, DateField
-# from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-# from flask_wtf.file import FileField, FileAllowed
-# from project2.models import
+
+class InputGPXFileForm(FlaskForm):
+    gpx_file = FileField('GPX File', validators=[FileAllowed(['gpx']), DataRequired()])
+    submit = SubmitField('Calculate')
 
 # class RegistrationForm(FlaskForm):
 #     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
