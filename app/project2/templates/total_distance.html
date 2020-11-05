@@ -32,8 +32,14 @@
         <div class="form-group">
             {{ form.submit(class="btn btn-outline-info") }}
         </div>
+    </div>
+    {% if distance %}
+    <div class="container">
+        <legend class="border-bottom mb-4">Total Distance Travelled in {{filename}}</legend>
+        <p>{{distance}} km</p>
     <hr>
-    </div> 
+    </div>
+    {% endif %}
 </main>
 
 {% endblock body %}

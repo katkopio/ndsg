@@ -1,6 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request
 from project2 import app, info
 from project2.forms import InputGPXFileForm
+from project2.api import parse_gpx_file, distance_travelled
 
 @app.route("/")
 @app.route("/home")
@@ -14,10 +15,14 @@ def features():
 @app.route("/features/total_distance", methods=['GET','POST'])
 def total_distance():
     form = InputGPXFileForm()
+    filename = ""
+    distance = None
     if request.method == 'POST' and form.validate_on_submit():
         gpx_file = request.files['gpx_file']
-        # put analysis here
-    return render_template('total_distance.html', title='Total Distance', info = info.get("total_distance"), form=form)
+        filename = gpx_file.filename
+        gps_data = parse_gpx_file(gpx_file)
+        distance = distance_travelled(gps_data)
+    return render_template('total_distance.html', title='Total Distance', info = info.get("total_distance"), distance=distance, filename=filename, form=form)
 
 @app.route("/features/speeding")
 def speeding():
