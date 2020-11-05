@@ -1,11 +1,18 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import SubmitField
-from wtforms.validators import DataRequired#, Length, Email, EqualTo, ValidationError
-# from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, SelectField, DateField
+from wtforms import SubmitField, StringField, SelectField, FloatField
+from wtforms.validators import DataRequired, NumberRange#, Length, Email, EqualTo, ValidationError
+# from wtforms import PasswordField, BooleanField, TextAreaField, DateField
 
 class InputGPXFileForm(FlaskForm):
     gpx_file = FileField('GPX File', validators=[FileAllowed(['gpx']), DataRequired()])
+    submit = SubmitField('Calculate')
+
+class SpeedViolationForm(FlaskForm):
+    gpx_file = FileField('GPX File', validators=[FileAllowed(['gpx']), DataRequired()])
+    speed_limit = FloatField('Speed Limit (in kph)', validators=[NumberRange(), DataRequired()])
+    time_minutes = FloatField('Duration (in minutes)', validators=[NumberRange(), DataRequired()])
+    analysis_type = SelectField('Analysis Type', choices=[('exp', 'Explicit'), ('loc', 'Location')], validators=[DataRequired()])
     submit = SubmitField('Calculate')
 
 # class RegistrationForm(FlaskForm):

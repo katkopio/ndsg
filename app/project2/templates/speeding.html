@@ -12,9 +12,110 @@
     </div>
     
     <div class="container">
-        <h3>Place feature here</h3>
-        <hr>
-    </div> 
+        <form method=POST enctype=multipart/form-data action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Input GPX File</legend>
+            <div class="form-group">
+                {{ form.gpx_file.label(class="form-control-label") }}
+                {% if form.gpx_file.errors %}
+                    {{ form.gpx_file(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.gpx_file.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.gpx_file(class="form-check-label") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.speed_limit.label(class="form-control-label") }}
+                {% if form.speed_limit.errors %}
+                    {{ form.speed_limit(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.speed_limit.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.speed_limit(class="form-check-label") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.time_minutes.label(class="form-control-label") }}
+                {% if form.time_minutes.errors %}
+                    {{ form.time_minutes(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.time_minutes.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.time_minutes(class="form-check-label") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.analysis_type.label(class="form-control-label") }}
+                {% if form.analysis_type.errors %}
+                    {{ form.analysis_type(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.analysis_type.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.analysis_type(class="form-check-label") }}
+                {% endif %}
+            </div>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+    </fieldset>
+    </div>
+
+    {% if violations %}
+    <div class="container">
+        <legend class="border-bottom mb-4">Violations Detected in {{filename}}</legend>
+        <p>Number of violations: {{number_violations}}</p>
+        {% for violation in violations %}
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Parameter</th>
+                <th scope="col">Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Duration of Violation</td>
+                <td>{{ violation[0] }}</td>
+              </tr>
+              <tr>
+                <td>Speeding Violation Start</td>
+                <td>{{ violation[1].get('time') }}</td>
+              </tr>
+              <tr>
+                <td>Coordinates (Lat, Long)</td>
+                <td>({{ violation[1].get('latitude') }}, {{ violation[1].get('longitude') }})</td>
+              </tr>
+              <tr>
+                <td>Speeding Violation End</td>
+                <td>{{ violation[2].get('time') }}</td>
+              </tr>
+              <tr>
+                <td>Coordinates (Lat, Long)</td>
+                <td>({{ violation[2].get('latitude') }}, {{ violation[2].get('longitude') }})</td>
+              </tr>
+            </tbody>
+        </table>
+        {% endfor %}
+    <hr>
+    </div>
+    {% endif %}
+
+
+
 </main>
 
 {% endblock body %}

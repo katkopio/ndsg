@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request
 from project2 import app, info
-from project2.forms import InputGPXFileForm
-from project2.api import parse_gpx_file, distance_travelled
+from project2.forms import InputGPXFileForm, SpeedViolationForm
+from project2.api import parse_gpx_file, distance_travelled, speed_violation
 
 @app.route("/")
 @app.route("/home")
@@ -22,11 +22,23 @@ def total_distance():
         filename = gpx_file.filename
         gps_data = parse_gpx_file(gpx_file)
         distance = distance_travelled(gps_data)
-    return render_template('total_distance.html', title='Total Distance', info = info.get("total_distance"), distance=distance, filename=filename, form=form)
+    return render_template('total_distance.html', title='Total Distance', info = info.get("total_distance"), filename=filename, distance=distance, form=form)
 
-@app.route("/features/speeding")
+@app.route("/features/speeding", methods=['GET','POST'])
 def speeding():
-    return render_template('speeding.html', title='Speeding', info = info.get("speeding"))
+    form = SpeedViolationForm()
+    filename = ""
+    violations = ""
+    number_violations = 0
+    if request.method == 'POST' and form.validate_on_submit():
+        speed_limit = form.speed_limit.data
+        time = form.time_minutes.data
+        gpx_file = request.files['gpx_file']
+        filename = gpx_file.filename
+        gps_data = parse_gpx_file(gpx_file)
+        violations = speed_violation(gps_data, "Location", speed_limit, time)
+        number_violations = len(violations)
+    return render_template('speeding.html', title='Speeding', info = info.get("speeding"), filename=filename, violations=violations, number_violations = number_violations, form=form)
 
 @app.route("/geofencing")
 def geofencing():
