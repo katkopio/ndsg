@@ -11,7 +11,7 @@ info = {
         "It was the first Nelvana-produced series to air on PBS before the Bookworm Bunch and Cyberchase. In 2017, on the 20th anniversary of the series' cancellation, a sequel series titled The Magic School Bus Rides Again premiered on Netflix."],
     "speeding": [
         "Speeding Violation Detector", 
-        "Determines if a speeding violation (in km/hr) occurs, given a duration of time in minutes. This can detect speeding by solely from the GPX file ('Explicit'), or by calcuating the speed the vehicle travelled from the GPS datapoints ('Location').",
+        "Determines if a speeding violation (in km/hr) occured for a given duration of time (in minutes). This can detect speeding in 2 ways: from the speed readings in the GPX file ('Explicit'), or by calcuating the speed from the latitude and longitude ('Location').",
         "Miss Frizzle embarks on adventures with her class on the eponymous school bus. As they journey on their exciting field trips, they discover locations, creatures, time periods and more to learn about the wonders of science along the way."],
     "geofencing": [
         "Geofence Creation", 
