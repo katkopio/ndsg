@@ -59,7 +59,7 @@ if __name__ == '__main__':
     # generate_time_files(time_interval)
     # generate_grids(time_interval, distance_interval)
 
-    print("desc,time_interval,grid_distance,num_loops,time,accuracy")
+    print("desc,data_freq,grid_distance,num_loops,time,accuracy")
     analyze_gpx(time_interval, distance_interval)
 
 # run with python3 script.py > out.txt
