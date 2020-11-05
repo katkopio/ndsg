@@ -1,5 +1,5 @@
 from flask import render_template, url_for, flash, redirect, request
-from project2 import app, mongo, info
+from project2 import app, info
 from project2.forms import InputGPXFileForm
 
 @app.route("/")

@@ -1,11 +1,8 @@
 import os
 from flask import Flask
-from flask_pymongo import PyMongo
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '824fb3bf0f538824c22fe8b8e26a2596'
-app.config["MONGO_URI"] = "mongodb+srv://admin:azR4ENUNm1FPH4pj@project2.sqrmt.mongodb.net/Project2?retryWrites=true&w=majority"
-mongo = PyMongo(app)
 
 info = {
     "total_distance": [
