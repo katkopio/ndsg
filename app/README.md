@@ -23,4 +23,4 @@ pip install -r requirements.txt
 1. Activate virtual environment
 2. Go to `project2`
 3. Type `python3 run.py`
-4. Open browser and type in `localhost:4000`
+4. Open browser and type in `localhost:5000`
