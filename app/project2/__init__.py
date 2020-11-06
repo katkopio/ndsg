@@ -1,8 +1,11 @@
 import os
 from flask import Flask
+from project2.config import Config 
+# from flask_pymongo import PyMongo
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '824fb3bf0f538824c22fe8b8e26a2596'
+app.config.from_object(Config)
+# mongo = PyMongo(app)
 
 info = {
     "total_distance": [
