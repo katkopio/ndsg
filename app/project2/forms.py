@@ -15,6 +15,15 @@ class SpeedViolationForm(FlaskForm):
     analysis_type = SelectField('Analysis Type', choices=[('exp', 'Explicit'), ('loc', 'Location')], validators=[DataRequired()])
     submit = SubmitField('Calculate')
 
+class GeofencingForm(FlaskForm):
+    gpx_file = FileField('GPX File')
+    submit = SubmitField('See Points')
+    lat1 = StringField('Latitude 1')
+    lon1 = StringField('Longitude 1')
+    lon2 = StringField('Longitude 2')
+    lat2 = StringField('Latitude 2')
+    compute = SubmitField('Compute')
+
 # class RegistrationForm(FlaskForm):
 #     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
 #     email = StringField('Email', validators=[DataRequired(), Email()])

@@ -1,5 +1,13 @@
 {% extends "layout.html" %}
 {% block body %}
+<style>
+.number-icon
+{
+    background-image: url("/static/img/marker.png");
+    text-align:center;
+    color:White;    
+}
+</style>
 
 <main role="main">
     
@@ -12,7 +20,130 @@
     </div>
     
     <div class="container">
-        <h3>Place feature here</h3>
+        <div class="row">
+            <div class="col-md-4">
+                <form method=POST enctype=multipart/form-data action="">
+                    <!-- Form to get GPX file -->
+                    {{ form.hidden_tag() }}
+                    <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">Input GPX File</legend>
+                    <div class="form-group">
+                        {% if form.gpx_file.errors %}
+                            {{ form.gpx_file(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.gpx_file.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.gpx_file(class="form-check-label") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.submit(class="btn btn-outline-info") }}
+                    </div>
+
+                    <!-- Form to get Lat Lon pairs -->
+                    {% if filename %}
+                    <div class="form-group">
+                        {{ form.lat1.label(class="form-control-label") }}
+                        <input id="latitude1" type="text" />
+                    </div>
+                    <div class="form-group">
+                        {{ form.lon1.label(class="form-control-label") }}
+                        <input id="longitude1" type="text" />
+                    </div>
+                    <div class="form-group">
+                        {{ form.lat2.label(class="form-control-label") }}
+                        <input id="latitude2" type="text" />
+                    </div>
+                    <div class="form-group">
+                        {{ form.lon2.label(class="form-control-label") }}
+                        <input id="longitude2" type="text" />
+                    </div>
+                    <div class="form-group">
+                        {{ form.compute(class="btn btn-outline-info") }}
+                    </div>
+                    {% endif %}
+                    </fieldset>
+            </div>
+            {% if filename %}
+            <div class="col-md-8">
+                <legend class="border-bottom mb-4">Choose Points</legend>
+                <div class="row">
+                    <div id="mapid" style='width: 100%; height: 300px;'></div>                  
+                        <script>
+                            var geojson_data = JSON.parse('{{ locations | tojson | safe }}');
+                            var start_point = geojson_data[0].geometry.coordinates.reverse();
+                            var tileLayer = new L.TileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',{ attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>' });
+                            // var tileLayer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors' })
+
+                            // Create a map
+                            var map = new L.Map('mapid', {
+                                center: start_point,
+                                zoom: 13,
+                                layers: [tileLayer]
+                            });
+
+                            // Display points
+                            geojsonLayer = L.geoJson(geojson_data, {
+                                style: function(feature) {
+                                    return {
+                                        color: "blue"
+                                    };
+                                },
+                                pointToLayer: function(feature, latlng) {
+                                    return new L.CircleMarker(latlng, {
+                                        radius: 1,
+                                        fillOpacity: 0.85
+                                    });
+                                }
+                            });
+                            map.addLayer(geojsonLayer);
+
+                            // Create numbered marker
+                            var markerOne = L.divIcon({
+                                className: "number-icon",
+                                iconSize: [25, 41],
+                                iconAnchor: [10, 44],
+                                popupAnchor: [3, -40],
+                                html: "1"
+                            });
+                            var markerTwo = L.divIcon({
+                                className: "number-icon",
+                                iconSize: [25, 41],
+                                iconAnchor: [10, 44],
+                                popupAnchor: [3, -40],
+                                html: "2"
+                            });
+
+                            // Get top left corner
+                            var marker1 = L.marker(start_point,{
+                                draggable: true,
+                                icon: markerOne
+                            }).addTo(map);
+
+                            marker1.on('dragend', function (e) {
+                                document.getElementById('latitude1').value = marker1.getLatLng().lat;
+                                document.getElementById('longitude1').value = marker1.getLatLng().lng;
+                            });
+
+                            // Get bottom right corner
+                            var marker2 = L.marker(start_point,{
+                                draggable: true,
+                                icon: markerTwo
+                            }).addTo(map);
+
+                            marker2.on('dragend', function (e) {
+                                document.getElementById('latitude2').value = marker2.getLatLng().lat;
+                                document.getElementById('longitude2').value = marker2.getLatLng().lng;
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
     </div> 
 </main>
 

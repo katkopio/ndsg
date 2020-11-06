@@ -12,3 +12,4 @@ werkzeug==0.16.0
 haversine == 2.3.0
 gpxpy == 1.4.2
 shapely == 1.7.1
+geojson == 2.5.0
