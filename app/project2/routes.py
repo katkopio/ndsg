@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request
 from project2 import app, info
 from project2.forms import InputGPXFileForm, SpeedViolationForm, GeofencingForm
-from project2.api import parse_gpx_file, distance_travelled, speed_violation
+from project2.api import parse_gpx_file, distance_travelled, speed_violation, create_geofence
 from geojson import Point, Feature
 
 @app.route("/")
@@ -54,12 +54,31 @@ def geofencing():
     form = GeofencingForm()
     filename = ""
     locations = []
+    results = []
+    number_violations = 0
     if request.method == 'POST' and form.validate_on_submit():
-        gpx_file = request.files['gpx_file']
-        filename = gpx_file.filename
-        gps_data = parse_gpx_file(gpx_file)
-        locations = create_geojson_feature(gps_data)
-    return render_template('geofencing.html', title='Geofencing', info = info.get("geofencing"), filename=filename, locations=locations, form=form)
+        if 'submit' in request.form.to_dict():
+            gpx_file = request.files['gpx_file']
+            filename = gpx_file.filename
+            gps_data = parse_gpx_file(gpx_file)
+            locations = create_geojson_feature(gps_data)
+        if 'compute' in request.form.to_dict():
+            gpx_file = request.files['gpx_file']
+            filename = gpx_file.filename
+            gps_data = parse_gpx_file(gpx_file)
+
+            lat1 = float(request.form.to_dict().get("lat1"))
+            lon1 = float(request.form.to_dict().get("lon1"))
+            point1 = (lat1, lon1)
+            lat2 = float(request.form.to_dict().get("lat2"))
+            lon2 = float(request.form.to_dict().get("lon2"))
+            point2 = (lat2, lon2)
+            min_time = int(request.form.to_dict().get("min_time"))
+            max_time = int(request.form.to_dict().get("max_time"))
+            results = create_geofence(gps_data, min_time, max_time, point1, point2)
+            number_violations = len(results)
+            print(results)
+    return render_template('geofencing.html', title='Geofencing', info = info.get("geofencing"), filename=filename, locations=locations, results=results, number_violations=number_violations, form=form)
 
 @app.route("/features/liveness")
 def liveness():

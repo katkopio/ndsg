@@ -1,7 +1,7 @@
 from haversine import haversine
 import gpxpy
 import gpxpy.gpx
-
+from shapely.geometry import Point, Polygon
 import pdb
 
 def parse_gpx_file(gpx_file_location):
@@ -96,3 +96,47 @@ def speed_violation(gps_data, type, speed_limit, time):
             first_point = True
 
     return list_violations
+
+def create_geofence(gps_data, min_limit, max_time, point1, point2):
+    fence = Polygon([point1, (point1[0], point2[1]), point2, (point2[0], point1[1])])
+    index_start = -1
+    results = []
+
+    for i in range(len(gps_data)):
+        pt = Point(gps_data[i].get('latitude'), gps_data[i].get('longitude'))
+
+        if fence.intersects(pt):
+            # print(gps_data[i].get('time').strftime('%X'))
+            if index_start == -1:
+                index_start = i
+        else:
+            if index_start != -1:
+                timer_start = gps_data[index_start].get('time').timestamp()
+                timer_end = gps_data[i-1].get('time').timestamp()
+                fence_time = timer_end - timer_start
+
+                if fence_time < min_limit:
+                    results.append({
+                        'violation': 'below limit',
+                        'time': fence_time,
+                        'start': gps_data[index_start].get('time').strftime('%X'),
+                        'end': gps_data[i-1].get('time').strftime('%X')
+                    })
+                elif fence_time > max_time:
+                    results.append({
+                        'violation': 'above limit',
+                        'time': fence_time,
+                        'start': gps_data[index_start].get('time').strftime('%X'),
+                        'end': gps_data[i-1].get('time').strftime('%X')
+                    })
+                else:
+                    results.append({
+                        'violation': 'within limit',
+                        'time': fence_time,
+                        'start': gps_data[index_start].get('time').strftime('%X'),
+                        'end': gps_data[i-1].get('time').strftime('%X')
+                    })
+                
+                index_start = -1
+
+    return results

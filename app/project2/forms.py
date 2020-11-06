@@ -16,12 +16,14 @@ class SpeedViolationForm(FlaskForm):
     submit = SubmitField('Calculate')
 
 class GeofencingForm(FlaskForm):
-    gpx_file = FileField('GPX File')
+    gpx_file = FileField('GPX File', validators=[FileAllowed(['gpx']), DataRequired()])
     submit = SubmitField('See Points')
     lat1 = StringField('Latitude 1')
     lon1 = StringField('Longitude 1')
     lon2 = StringField('Longitude 2')
     lat2 = StringField('Latitude 2')
+    min_time = StringField('Minimum Time (seconds)')
+    max_time = StringField('Maximum Time (seconds)')
     compute = SubmitField('Compute')
 
 # class RegistrationForm(FlaskForm):

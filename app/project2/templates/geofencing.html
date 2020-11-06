@@ -43,23 +43,51 @@
                         {{ form.submit(class="btn btn-outline-info") }}
                     </div>
 
+                    {% if filename or results %}
+                    <!-- Form to get Min and Max Time -->
+                    <div class="form-group">
+                        {{ form.min_time.label(class="form-control-label") }}
+                        {% if form.min_time.errors %}
+                            {{ form.min_time(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.min_time.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.min_time(class="form-check-label") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.max_time.label(class="form-control-label") }}
+                        {% if form.max_time.errors %}
+                            {{ form.max_time(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.max_time.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.max_time(class="form-check-label") }}
+                        {% endif %}
+                    </div>
+
                     <!-- Form to get Lat Lon pairs -->
-                    {% if filename %}
                     <div class="form-group">
                         {{ form.lat1.label(class="form-control-label") }}
-                        <input id="latitude1" type="text" />
+                        <input id="latitude1" name="lat1" type="text" />
                     </div>
                     <div class="form-group">
                         {{ form.lon1.label(class="form-control-label") }}
-                        <input id="longitude1" type="text" />
+                        <input id="longitude1" name="lon1" type="text" />
                     </div>
                     <div class="form-group">
                         {{ form.lat2.label(class="form-control-label") }}
-                        <input id="latitude2" type="text" />
+                        <input id="latitude2" name="lat2" type="text" />
                     </div>
                     <div class="form-group">
                         {{ form.lon2.label(class="form-control-label") }}
-                        <input id="longitude2" type="text" />
+                        <input id="longitude2" name="lon2" type="text" />
                     </div>
                     <div class="form-group">
                         {{ form.compute(class="btn btn-outline-info") }}
@@ -67,7 +95,7 @@
                     {% endif %}
                     </fieldset>
             </div>
-            {% if filename %}
+            {% if filename or results %}
             <div class="col-md-8">
                 <legend class="border-bottom mb-4">Choose Points</legend>
                 <div class="row">
@@ -143,6 +171,40 @@
                 </div>
             </div>
             {% endif %}
+            <div class="container">
+            {% if results %}
+                <legend class="border-bottom mb-4">Violations Detected in {{filename}}</legend>
+                <p>Number of violations: {{ number_violations }}</p>
+                {% for result in results %}
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Parameter</th>
+                        <th scope="col">Result</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Violation Type</td>
+                        <td>{{ result.get("violation") }}</td>
+                      </tr>
+                      <tr>
+                        <td>Total Time Spent</td>
+                        <td>{{ result.get('time') }}</td>
+                      </tr>
+                      <tr>
+                        <td>Start of Violation</td>
+                        <td>{{ result.get('start') }}</td>
+                      </tr>
+                      <tr>
+                        <td>End of Violation</td>
+                        <td>{{ result.get('end') }}</td>
+                      </tr>
+                    </tbody>
+                </table>
+                {% endfor %}
+            {% endif %}
+            </div>
         </div>
     </div> 
 </main>
