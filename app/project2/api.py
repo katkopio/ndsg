@@ -90,7 +90,7 @@ def speed_violation(gps_data, type, speed_limit, time):
             speeding = False
 
             if (sec_to_minute(time_elapsed) >= time): 
-                list_violations.append((sec_to_minute(time_elapsed), starting_point, gps_data[i-1]))
+                list_violations.append((time_elapsed, starting_point, gps_data[i-1]))
 
             time_elapsed = -1
             first_point = True
@@ -106,7 +106,6 @@ def create_geofence(gps_data, min_limit, max_time, point1, point2):
         pt = Point(gps_data[i].get('latitude'), gps_data[i].get('longitude'))
 
         if fence.intersects(pt):
-            # print(gps_data[i].get('time').strftime('%X'))
             if index_start == -1:
                 index_start = i
         else:
