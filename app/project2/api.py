@@ -173,3 +173,107 @@ def check_liveness(gps_data, time_limit):
     total_liveness += segment_liveness
 
     return total_liveness, results
+
+def generate_corner_pts(gps_data):
+    greatest_lat = gps_data[0].get('latitude')
+    least_lat = gps_data[0].get('latitude')
+    greatest_long = gps_data[0].get('longitude')
+    least_long = gps_data[0].get('longitude')
+
+    for point in gps_data:
+        point_lat = point.get('latitude')
+        point_long = point.get('longitude')
+
+        if point_lat > greatest_lat:
+            greatest_lat = point_lat 
+        elif point_lat < least_lat:
+            least_lat = point_lat
+        
+        if point_long > greatest_long:
+            greatest_long = point_long
+        elif point_long < least_long:
+            least_long = point_long
+
+    greatest_lat += 0.00045
+    least_long -= 0.00045
+    least_lat -= 0.00045
+    greatest_long += 0.00045
+
+    return (greatest_lat, least_long), (least_lat, greatest_long)
+
+def generate_grid_pts(point1, point2, side_length):
+    grid = []
+
+    side_interval = side_length * 0.009
+
+    latitude = point1[0]
+    longitude = point1[1]
+
+    while latitude > point2[0] - side_interval:
+        row = []
+        while longitude < point2[1] + side_interval:
+            row.append((latitude, longitude))
+            longitude += side_interval
+        longitude = point1[1]
+        latitude -= side_interval
+
+        grid.append(row)
+
+    return grid
+
+def generate_grid_fence(grid_pts):
+    grid_fence = []
+
+    for y in range(len(grid_pts)-1):
+        for x in range(len(grid_pts[0])-1):
+            top_left_pt = grid_pts[y][x]
+            top_right_pt = grid_pts[y][x+1]
+            bottom_left_pt = grid_pts[y+1][x]
+            bottom_right_pt = grid_pts[y+1][x+1]
+
+            geofence = Polygon([top_left_pt, top_right_pt, bottom_right_pt, bottom_left_pt])
+            grid_fence.append(geofence)
+    
+    return grid_fence
+
+def generate_path(gps_data, grid_fence):
+    path = []
+    current_fence = -1
+
+    for point in gps_data:
+        pt = Point(point.get('latitude'), point.get('longitude'))
+        for i in range(len(grid_fence)):
+            if grid_fence[i].intersects(pt):
+                if current_fence != i:
+                    current_fence = i 
+                    path.append(i)
+                    break
+
+    return path
+
+def generate_route(vehicle_route):
+    route = [vehicle_route[0]]
+
+    for i in range(1,len(vehicle_route)):
+        route.append(vehicle_route[i])
+        if vehicle_route[i] == route[0]:
+            break
+    
+    return route
+
+def route_check(set_route, vehicle_route):
+    set_route = "".join([str(x) for x in set_route])
+    vehicle_route = "".join([str(x) for x in vehicle_route])
+
+    loops = 0
+    start = 0 
+    while start < len(vehicle_route):
+        pos = vehicle_route.find(set_route, start)
+
+        if pos != -1:
+            start = pos + 1
+            loops += 1
+        else:
+            break
+
+    return loops

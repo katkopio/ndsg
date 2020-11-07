@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request
 from project2 import app, info, db
-from project2.forms import InputGPXFileForm, SpeedViolationForm, StopViolationForm, LivenessForm
-from project2.api import parse_gpx_file, distance_travelled, speed_violation, stop_violation, check_liveness
+from project2.forms import InputGPXFileForm, SpeedViolationForm, StopViolationForm, LivenessForm, LoopForm
+from project2.api import parse_gpx_file, distance_travelled, speed_violation, stop_violation, check_liveness, generate_corner_pts, generate_grid_pts, generate_grid_fence, generate_path, generate_route, route_check
 from geojson import Point, Feature
 
 ALLOWED_EXTENSIONS = {'gpx'}
@@ -98,9 +98,24 @@ def liveness():
         total_liveness, results = check_liveness(gps_data,time_limit)
     return render_template('liveness.html', title='Liveness', info = info.get("liveness"), filename=filename, total_liveness=total_liveness, results=results, form=form)
 
-@app.route("/features/loop_counting")
+@app.route("/features/loop_counting", methods=['GET','POST'])
 def loop_counting():
-    return render_template('loop_counting.html', title='Loop Counting', info = info.get("loop_counting"))
+    form = LoopForm()
+    filename = ""
+    loops = -1
+    if request.method == 'POST' and form.validate_on_submit():
+        side_length = form.side_length.data 
+        gpx_file = request.files['gpx_file']
+        filename = gpx_file.filename 
+
+        gps_data = parse_gpx_file(gpx_file)
+        point1, point2 = generate_corner_pts(gps_data)
+        grid_pts = generate_grid_pts(point1, point2, side_length)
+        grid_fence = generate_grid_fence(grid_pts)
+        vehicle_route = generate_path(gps_data, grid_fence)
+        set_route = generate_route(vehicle_route)
+        loops = route_check(set_route, vehicle_route)
+    return render_template('loop_counting.html', title='Loop Counting', info = info.get("loop_counting"), filename=filename, loops=loops, form=form)
 
 # import os
 # import uuid

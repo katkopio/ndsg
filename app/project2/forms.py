@@ -31,6 +31,11 @@ class LivenessForm(FlaskForm):
     time_limit = FloatField('Time Limit (in seconds)', validators=[NumberRange(), DataRequired()])
     submit = SubmitField('Calculate')
 
+class LoopForm(FlaskForm):
+    gpx_file = FileField('GPX File', validators=[FileAllowed(['gpx']), DataRequired()])
+    side_length = FloatField('Grid Cell Size (in km)', validators=[NumberRange(), DataRequired()])
+    submit = SubmitField('Calculate')
+
 # class RegistrationForm(FlaskForm):
 #     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
 #     email = StringField('Email', validators=[DataRequired(), Email()])
