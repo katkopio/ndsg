@@ -1,11 +1,11 @@
 import os
 from flask import Flask
 from project2.config import Config 
-# from flask_pymongo import PyMongo
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config.from_object(Config)
-# mongo = PyMongo(app)
+db = SQLAlchemy(app)
 
 info = {
     "total_distance": [

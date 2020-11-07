@@ -1,5 +1,5 @@
 from flask import render_template, url_for, flash, redirect, request
-from project2 import app, info
+from project2 import app, info, db
 from project2.forms import InputGPXFileForm, SpeedViolationForm, GeofencingForm
 from project2.api import parse_gpx_file, distance_travelled, speed_violation, create_geofence
 from geojson import Point, Feature
