@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request
 from project2 import app, info
-from project2.forms import InputGPXFileForm, SpeedViolationForm, GeofencingForm
-from project2.api import parse_gpx_file, distance_travelled, speed_violation, create_geofence
+from project2.forms import InputGPXFileForm, SpeedViolationForm, GeofencingForm, LivenessForm
+from project2.api import parse_gpx_file, distance_travelled, speed_violation, create_geofence, check_liveness
 from geojson import Point, Feature
 
 @app.route("/")
@@ -80,9 +80,19 @@ def geofencing():
             print(results)
     return render_template('geofencing.html', title='Geofencing', info = info.get("geofencing"), filename=filename, locations=locations, results=results, number_violations=number_violations, form=form)
 
-@app.route("/features/liveness")
+@app.route("/features/liveness", methods=['GET','POST'])
 def liveness():
-    return render_template('liveness.html', title='Liveness', info = info.get("liveness"))
+    form = LivenessForm()
+    filename = ""
+    total_liveness = -1
+    results = []
+    if request.method == 'POST' and form.validate_on_submit():
+        time_limit = form.time_limit.data
+        gpx_file = request.files['gpx_file']
+        filename = gpx_file.filename
+        gps_data = parse_gpx_file(gpx_file)
+        total_liveness, results = check_liveness(gps_data,time_limit)
+    return render_template('liveness.html', title='Liveness', info = info.get("liveness"), filename=filename, total_liveness=total_liveness, results=results, form=form)
 
 @app.route("/features/route_finding")
 def route_finding():

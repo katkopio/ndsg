@@ -140,3 +140,44 @@ def create_geofence(gps_data, min_limit, max_time, point1, point2):
                 index_start = -1
 
     return results
+
+def check_liveness(gps_data, time_limit):
+    """
+    Determines total "aliveness" time of a vehicle. The
+    vehicle is considered "alive" if the gaps between
+    GPS readings are less than given {time_limit}.
+    Input:  gps_data (array of dictionaries)
+            time_limit (in seconds)
+    Output: total_liveness (in seconds)
+            results (array of dictionaries)
+    """
+    results = []
+    total_liveness = 0
+    start_index = 0
+
+    for i in range(len(gps_data) - 1):
+        time0 = gps_data[i].get("time")
+        time1 = gps_data[i+1].get("time")
+        time_diff = time1.timestamp() - time0.timestamp()
+
+        if time_diff >= time_limit:
+            segment_liveness = time0.timestamp() - gps_data[start_index].get("time").timestamp()
+            results.append({
+                "liveness": segment_liveness,
+                "start": gps_data[start_index].get("time"),
+                "end": gps_data[i].get("time")
+            })
+            start_index = i + 1
+            total_liveness += segment_liveness
+    
+    time0 = gps_data[start_index].get("time")
+    time1 = gps_data[-1].get("time")
+    segment_liveness = time1.timestamp() - time0.timestamp()
+    results.append({
+        "liveness": segment_liveness,
+        "start": time0,
+        "end": time1
+    })
+    total_liveness += segment_liveness
+
+    return total_liveness, results

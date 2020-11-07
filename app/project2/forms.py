@@ -26,6 +26,11 @@ class GeofencingForm(FlaskForm):
     max_time = StringField('Maximum Time (seconds)')
     compute = SubmitField('Compute')
 
+class LivenessForm(FlaskForm):
+    gpx_file = FileField('GPX File', validators=[FileAllowed(['gpx']), DataRequired()])
+    time_limit = FloatField('Time Limit (in seconds)', validators=[NumberRange(), DataRequired()])
+    submit = SubmitField('Calculate')
+
 # class RegistrationForm(FlaskForm):
 #     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
 #     email = StringField('Email', validators=[DataRequired(), Email()])
