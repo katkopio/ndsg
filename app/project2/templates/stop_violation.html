@@ -172,6 +172,7 @@
             </div>
             {% endif %}
             <div class="container">
+                {% if processed == True %}
                 <legend class="border-bottom mb-4">Violations Detected in {{filename}}</legend>
                 <p>Number of violations: {{ number_violations }}</p>
                 {% if results %}

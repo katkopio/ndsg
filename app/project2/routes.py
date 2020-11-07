@@ -1,8 +1,11 @@
 from flask import render_template, url_for, flash, redirect, request
-from project2 import app, info
+from project2 import app, info, db
 from project2.forms import InputGPXFileForm, SpeedViolationForm, StopViolationForm, LivenessForm
-from project2.api import parse_gpx_file, distance_travelled, speed_violation, stop_violation, check_liveness
 from geojson import Point, Feature
+
+ALLOWED_EXTENSIONS = {'gpx'}
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route("/")
 @app.route("/home")
@@ -56,6 +59,7 @@ def stop():
     locations = []
     results = []
     number_violations = 0
+    processed=False
     if request.method == 'POST' and form.validate_on_submit():
         if 'submit' in request.form.to_dict():
             gpx_file = request.files['gpx_file']
@@ -97,3 +101,19 @@ def liveness():
 @app.route("/features/loop_counting")
 def loop_counting():
     return render_template('loop_counting.html', title='Loop Counting', info = info.get("loop_counting"))
+
+# import os
+# import uuid
+# from project2.models import GPXFile
+# from werkzeug.utils import secure_filename
+
+# Code to save to DB and save file
+        # if gpx_file and allowed_file(filename):
+        #     # Calculations
+        #     # Save File
+        #     saved_file = str(uuid.uuid4().hex)
+        #     gpx_file.save(os.path.join(app.config['UPLOAD_FOLDER'], saved_file))
+        #     # Save to DB
+        #     gpx_db = GPXFile(file_name=saved_file)
+        #     db.session.add(gpx_db)
+        #     db.session.commit()
