@@ -56,6 +56,7 @@ def geofencing():
     locations = []
     results = []
     number_violations = 0
+    processed=False
     if request.method == 'POST' and form.validate_on_submit():
         if 'submit' in request.form.to_dict():
             gpx_file = request.files['gpx_file']
@@ -76,9 +77,18 @@ def geofencing():
             min_time = int(request.form.to_dict().get("min_time"))
             max_time = int(request.form.to_dict().get("max_time"))
             results = create_geofence(gps_data, min_time, max_time, point1, point2)
+            processed = True
             number_violations = len(results)
             print(results)
-    return render_template('geofencing.html', title='Geofencing', info = info.get("geofencing"), filename=filename, locations=locations, results=results, number_violations=number_violations, form=form)
+    return render_template('geofencing.html', 
+        title='Geofencing', 
+        info = info.get("geofencing"), 
+        filename=filename, 
+        locations=locations, 
+        results=results, 
+        number_violations=number_violations, 
+        processed=processed,
+        form=form)
 
 @app.route("/features/liveness")
 def liveness():
