@@ -94,10 +94,6 @@ def liveness():
         total_liveness, results = check_liveness(gps_data,time_limit)
     return render_template('liveness.html', title='Liveness', info = info.get("liveness"), filename=filename, total_liveness=total_liveness, results=results, form=form)
 
-@app.route("/features/route_finding")
-def route_finding():
-    return render_template('route_finding.html', title='Route Finding', info = info.get("route_finding"))
-
 @app.route("/features/loop_counting")
 def loop_counting():
     return render_template('loop_counting.html', title='Loop Counting', info = info.get("loop_counting"))

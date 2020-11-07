@@ -22,9 +22,6 @@ info = {
     "liveness": [
         "Liveness Checking", 
         "Scholastic Entertainment president Deborah Forte explained that adapting the books into an animated series was an opportunity to help kids \"learn about science in a fun way\".During this time, Forte had been hearing concerns from parents and teachers about how to improve science education for kids and minorities across the globe."],
-        "route_finding": [
-        "Route Finding", 
-        "When The Magic School Bus was syndicated on commercial networks, the Producer Says segment at the end of each episode was cut out to make space for commercials. The Producer Says segments were only seen when the series was shown on non-commercial networks, international networks, VHS, and DVD releases."],
     "loop_counting": [
         "Loop Counter", 
         "Within the episodes, there were also time points where the episode fades out and then fades back in after a series of commercials are shown. On non-commercial networks, VHS, and DVD releases the scene immediately fades back in right after it fades out as no commercials are shown."]
