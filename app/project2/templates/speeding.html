@@ -78,38 +78,27 @@
     <div class="container">
         <legend class="border-bottom mb-4">Violations Detected in {{filename}}</legend>
         <p>Number of violations: {{number_violations}}</p>
-        {% for violation in violations %}
         <table class="table">
             <thead>
-              <tr>
-                <th scope="col">Parameter</th>
-                <th scope="col">Result</th>
-              </tr>
+                <tr>
+                    <th scope="col">Violation No.</th>
+                    <th scope="col">Duration</th>
+                    <th scope="col">Start</th>
+                    <th scope="col">End</th>
+                </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Duration of Violation</td>
-                <td>{{ violation[0] }}</td>
-              </tr>
-              <tr>
-                <td>Speeding Violation Start</td>
-                <td>{{ violation[1].get('time') }}</td>
-              </tr>
-              <tr>
-                <td>Coordinates (Lat, Long)</td>
-                <td>({{ violation[1].get('latitude') }}, {{ violation[1].get('longitude') }})</td>
-              </tr>
-              <tr>
-                <td>Speeding Violation End</td>
-                <td>{{ violation[2].get('time') }}</td>
-              </tr>
-              <tr>
-                <td>Coordinates (Lat, Long)</td>
-                <td>({{ violation[2].get('latitude') }}, {{ violation[2].get('longitude') }})</td>
-              </tr>
+                {% for violation in violations %}
+                <tr>
+                    {% set index = violations.index(violation) + 1%}
+                    <td>{{index}}</td>
+                    <td>{{violation[0]}}s</td>
+                    <td>{{violation[1].get('time')}}</td>
+                    <td>{{violation[2].get('time')}}</td>
+                </tr>
+                {% endfor %}
             </tbody>
         </table>
-        {% endfor %}
     </div>
     {% endif %}
 </main>

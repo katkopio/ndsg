@@ -15,7 +15,7 @@ class SpeedViolationForm(FlaskForm):
     analysis_type = SelectField('Analysis Type', choices=[('exp', 'Explicit'), ('loc', 'Location')], validators=[DataRequired()])
     submit = SubmitField('Calculate')
 
-class GeofencingForm(FlaskForm):
+class StopViolationForm(FlaskForm):
     gpx_file = FileField('GPX File', validators=[FileAllowed(['gpx']), DataRequired()])
     submit = SubmitField('See Points')
     lat1 = StringField('Latitude 1')
@@ -25,6 +25,11 @@ class GeofencingForm(FlaskForm):
     min_time = StringField('Minimum Time (seconds)')
     max_time = StringField('Maximum Time (seconds)')
     compute = SubmitField('Compute')
+
+class LivenessForm(FlaskForm):
+    gpx_file = FileField('GPX File', validators=[FileAllowed(['gpx']), DataRequired()])
+    time_limit = FloatField('Time Limit (in seconds)', validators=[NumberRange(), DataRequired()])
+    submit = SubmitField('Calculate')
 
 # class RegistrationForm(FlaskForm):
 #     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])

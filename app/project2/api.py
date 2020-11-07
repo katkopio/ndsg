@@ -90,14 +90,14 @@ def speed_violation(gps_data, type, speed_limit, time):
             speeding = False
 
             if (sec_to_minute(time_elapsed) >= time): 
-                list_violations.append((sec_to_minute(time_elapsed), starting_point, gps_data[i-1]))
+                list_violations.append((time_elapsed, starting_point, gps_data[i-1]))
 
             time_elapsed = -1
             first_point = True
 
     return list_violations
 
-def create_geofence(gps_data, min_limit, max_time, point1, point2):
+def stop_violation(gps_data, min_limit, max_time, point1, point2):
     fence = Polygon([point1, (point1[0], point2[1]), point2, (point2[0], point1[1])])
     index_start = -1
     results = []
@@ -106,7 +106,6 @@ def create_geofence(gps_data, min_limit, max_time, point1, point2):
         pt = Point(gps_data[i].get('latitude'), gps_data[i].get('longitude'))
 
         if fence.intersects(pt):
-            # print(gps_data[i].get('time').strftime('%X'))
             if index_start == -1:
                 index_start = i
         else:
@@ -129,14 +128,48 @@ def create_geofence(gps_data, min_limit, max_time, point1, point2):
                         'start': gps_data[index_start].get('time').strftime('%X'),
                         'end': gps_data[i-1].get('time').strftime('%X')
                     })
-                else:
-                    results.append({
-                        'violation': 'within limit',
-                        'time': fence_time,
-                        'start': gps_data[index_start].get('time').strftime('%X'),
-                        'end': gps_data[i-1].get('time').strftime('%X')
-                    })
                 
                 index_start = -1
 
     return results
+
+def check_liveness(gps_data, time_limit):
+    """
+    Determines total "aliveness" time of a vehicle. The
+    vehicle is considered "alive" if the gaps between
+    GPS readings are less than given {time_limit}.
+    Input:  gps_data (array of dictionaries)
+            time_limit (in seconds)
+    Output: total_liveness (in seconds)
+            results (array of dictionaries)
+    """
+    results = []
+    total_liveness = 0
+    start_index = 0
+
+    for i in range(len(gps_data) - 1):
+        time0 = gps_data[i].get("time")
+        time1 = gps_data[i+1].get("time")
+        time_diff = time1.timestamp() - time0.timestamp()
+
+        if time_diff >= time_limit:
+            segment_liveness = time0.timestamp() - gps_data[start_index].get("time").timestamp()
+            results.append({
+                "liveness": segment_liveness,
+                "start": gps_data[start_index].get("time"),
+                "end": gps_data[i].get("time")
+            })
+            start_index = i + 1
+            total_liveness += segment_liveness
+    
+    time0 = gps_data[start_index].get("time")
+    time1 = gps_data[-1].get("time")
+    segment_liveness = time1.timestamp() - time0.timestamp()
+    results.append({
+        "liveness": segment_liveness,
+        "start": time0,
+        "end": time1
+    })
+    total_liveness += segment_liveness
+
+    return total_liveness, results
