@@ -175,35 +175,30 @@
                 <legend class="border-bottom mb-4">Violations Detected in {{filename}}</legend>
                 <p>Number of violations: {{ number_violations }}</p>
                 {% if results %}
-                {% for result in results %}
                 <table class="table">
                     <thead>
-                      <tr>
-                        <th scope="col">Parameter</th>
-                        <th scope="col">Result</th>
-                      </tr>
+                        <tr>
+                            <th scope="col">Violation No.</th>
+                            <th scope="col">Violation Type</th>
+                            <th scope="col">Duration</th>
+                            <th scope="col">Start</th>
+                            <th scope="col">End</th>
+                        </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>Violation Type</td>
-                        <td>{{ result.get("violation") }}</td>
-                      </tr>
-                      <tr>
-                        <td>Total Time Spent</td>
-                        <td>{{ result.get('time') }}</td>
-                      </tr>
-                      <tr>
-                        <td>Start of Violation</td>
-                        <td>{{ result.get('start') }}</td>
-                      </tr>
-                      <tr>
-                        <td>End of Violation</td>
-                        <td>{{ result.get('end') }}</td>
-                      </tr>
-                    </tbody>
-                </table>
-                {% endfor %}
-            {% endif %}
+                        {% for result in results %}
+                            <tr>
+                                {% set index = results.index(result) + 1%}
+                                <td>{{index}}</td>
+                                <td>{{result.get('violation')}}</td>
+                                <td>{{result.get('time')}}</td>
+                                <td>{{result.get('start')}}</td>
+                                <td>{{result.get('end')}}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
             </div>
         </div>
     </div> 

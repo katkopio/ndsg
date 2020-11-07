@@ -97,7 +97,7 @@ def speed_violation(gps_data, type, speed_limit, time):
 
     return list_violations
 
-def create_geofence(gps_data, min_limit, max_time, point1, point2):
+def stop_violation(gps_data, min_limit, max_time, point1, point2):
     fence = Polygon([point1, (point1[0], point2[1]), point2, (point2[0], point1[1])])
     index_start = -1
     results = []
@@ -124,13 +124,6 @@ def create_geofence(gps_data, min_limit, max_time, point1, point2):
                 elif fence_time > max_time:
                     results.append({
                         'violation': 'above limit',
-                        'time': fence_time,
-                        'start': gps_data[index_start].get('time').strftime('%X'),
-                        'end': gps_data[i-1].get('time').strftime('%X')
-                    })
-                else:
-                    results.append({
-                        'violation': 'within limit',
                         'time': fence_time,
                         'start': gps_data[index_start].get('time').strftime('%X'),
                         'end': gps_data[i-1].get('time').strftime('%X')

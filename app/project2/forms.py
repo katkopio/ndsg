@@ -15,7 +15,7 @@ class SpeedViolationForm(FlaskForm):
     analysis_type = SelectField('Analysis Type', choices=[('exp', 'Explicit'), ('loc', 'Location')], validators=[DataRequired()])
     submit = SubmitField('Calculate')
 
-class GeofencingForm(FlaskForm):
+class StopViolationForm(FlaskForm):
     gpx_file = FileField('GPX File', validators=[FileAllowed(['gpx']), DataRequired()])
     submit = SubmitField('See Points')
     lat1 = StringField('Latitude 1')

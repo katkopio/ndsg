@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request
 from project2 import app, info
-from project2.forms import InputGPXFileForm, SpeedViolationForm, GeofencingForm, LivenessForm
-from project2.api import parse_gpx_file, distance_travelled, speed_violation, create_geofence, check_liveness
+from project2.forms import InputGPXFileForm, SpeedViolationForm, StopViolationForm, LivenessForm
+from project2.api import parse_gpx_file, distance_travelled, speed_violation, stop_violation, check_liveness
 from geojson import Point, Feature
 
 @app.route("/")
@@ -49,9 +49,9 @@ def create_geojson_feature(gps_data):
         locations.append(feature)
     return locations
 
-@app.route("/features/geofencing", methods=['GET','POST'])
-def geofencing():
-    form = GeofencingForm()
+@app.route("/features/stop", methods=['GET','POST'])
+def stop():
+    form = StopViolationForm()
     filename = ""
     locations = []
     results = []
@@ -75,10 +75,10 @@ def geofencing():
             point2 = (lat2, lon2)
             min_time = int(request.form.to_dict().get("min_time"))
             max_time = int(request.form.to_dict().get("max_time"))
-            results = create_geofence(gps_data, min_time, max_time, point1, point2)
+            results = stop_violation(gps_data, min_time, max_time, point1, point2)
             number_violations = len(results)
             print(results)
-    return render_template('geofencing.html', title='Geofencing', info = info.get("geofencing"), filename=filename, locations=locations, results=results, number_violations=number_violations, form=form)
+    return render_template('stop_violation.html', title='Stop', info = info.get("stop"), filename=filename, locations=locations, results=results, number_violations=number_violations, form=form)
 
 @app.route("/features/liveness", methods=['GET','POST'])
 def liveness():

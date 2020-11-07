@@ -16,13 +16,13 @@ info = {
         "Speeding Violation Detector", 
         "Determines if a speeding violation (in km/hr) occured for a given duration of time (in minutes). This can detect speeding in 2 ways: from the speed readings in the GPX file ('Explicit'), or by calcuating the speed from the latitude and longitude ('Location').",
         "Miss Frizzle embarks on adventures with her class on the eponymous school bus. As they journey on their exciting field trips, they discover locations, creatures, time periods and more to learn about the wonders of science along the way."],
-    "geofencing": [
-        "Geofence Creation", 
+    "stop": [
+        "Stop Violation Detector", 
         "In 1994, The Magic School Bus concept was made into an animated series of the same name by Scholastic Entertainment and it premiered on September 10, 1994. The idea for the TV series was developed by former Scholastic Entertainment Vice President and Senior Editorial Director Craig Walker."],
     "liveness": [
         "Liveness Checking", 
         "Scholastic Entertainment president Deborah Forte explained that adapting the books into an animated series was an opportunity to help kids \"learn about science in a fun way\".During this time, Forte had been hearing concerns from parents and teachers about how to improve science education for kids and minorities across the globe."],
-    "route_finding": [
+        "route_finding": [
         "Route Finding", 
         "When The Magic School Bus was syndicated on commercial networks, the Producer Says segment at the end of each episode was cut out to make space for commercials. The Producer Says segments were only seen when the series was shown on non-commercial networks, international networks, VHS, and DVD releases."],
     "loop_counting": [
