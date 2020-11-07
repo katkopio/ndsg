@@ -60,7 +60,6 @@ def stop():
     locations = []
     results = []
     number_violations = 0
-    processed=False
     if request.method == 'POST' and form.validate_on_submit():
         if 'submit' in request.form.to_dict():
             gpx_file = request.files['gpx_file']
