@@ -4,6 +4,10 @@ from project2.forms import InputGPXFileForm, SpeedViolationForm, GeofencingForm
 from project2.api import parse_gpx_file, distance_travelled, speed_violation, create_geofence
 from geojson import Point, Feature
 
+ALLOWED_EXTENSIONS = {'gpx'}
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 @app.route("/")
 @app.route("/home")
 def home():
@@ -101,3 +105,19 @@ def route_finding():
 @app.route("/features/loop_counting")
 def loop_counting():
     return render_template('loop_counting.html', title='Loop Counting', info = info.get("loop_counting"))
+
+# import os
+# import uuid
+# from project2.models import GPXFile
+# from werkzeug.utils import secure_filename
+
+# Code to save to DB and save file
+        # if gpx_file and allowed_file(filename):
+        #     # Calculations
+        #     # Save File
+        #     saved_file = str(uuid.uuid4().hex)
+        #     gpx_file.save(os.path.join(app.config['UPLOAD_FOLDER'], saved_file))
+        #     # Save to DB
+        #     gpx_db = GPXFile(file_name=saved_file)
+        #     db.session.add(gpx_db)
+        #     db.session.commit()
