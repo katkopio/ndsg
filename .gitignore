@@ -132,3 +132,4 @@ dmypy.json
 code/.DS_Store
 
 code/Datasets/Rio_Buses/
+app/project2/config.py
