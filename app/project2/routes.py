@@ -27,7 +27,7 @@ def total_distance():
         filename = gpx_file.filename
         gps_data = parse_gpx_file(gpx_file)
         distance = distance_travelled(gps_data)
-    return render_template('total_distance.html', title='Total Distance', info = info.get("total_distance"), filename=filename, distance=distance, form=form)
+    return render_template('total_distance.html', title='Total Distance Calculator', info = info.get("total_distance"), filename=filename, distance=distance, form=form)
 
 @app.route("/features/speeding", methods=['GET','POST'])
 def speeding():
@@ -43,7 +43,7 @@ def speeding():
         gps_data = parse_gpx_file(gpx_file)
         violations = speed_violation(gps_data, "Location", speed_limit, time)
         number_violations = len(violations)
-    return render_template('speeding.html', title='Speeding', info = info.get("speeding"), filename=filename, violations=violations, number_violations = number_violations, form=form)
+    return render_template('speeding.html', title='Speeding Violation Detection', info = info.get("speeding"), filename=filename, violations=violations, number_violations = number_violations, form=form)
 
 def create_geojson_feature(gps_data):
     locations = []
@@ -82,7 +82,7 @@ def stop():
             results = stop_violation(gps_data, min_time, max_time, point1, point2)
             number_violations = len(results)
             print(results)
-    return render_template('stop_violation.html', title='Stop', info = info.get("stop"), filename=filename, locations=locations, results=results, number_violations=number_violations, form=form)
+    return render_template('stop_violation.html', title='Stop Violation Detection', info = info.get("stop"), filename=filename, locations=locations, results=results, number_violations=number_violations, form=form)
 
 @app.route("/features/liveness", methods=['GET','POST'])
 def liveness():
@@ -96,7 +96,7 @@ def liveness():
         filename = gpx_file.filename
         gps_data = parse_gpx_file(gpx_file)
         total_liveness, results = check_liveness(gps_data,time_limit)
-    return render_template('liveness.html', title='Liveness', info = info.get("liveness"), filename=filename, total_liveness=total_liveness, results=results, form=form)
+    return render_template('liveness.html', title='Liveness Checking', info = info.get("liveness"), filename=filename, total_liveness=total_liveness, results=results, form=form)
 
 @app.route("/features/loop_counting", methods=['GET','POST'])
 def loop_counting():

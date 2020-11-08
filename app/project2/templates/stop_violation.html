@@ -27,6 +27,11 @@
                     {{ form.hidden_tag() }}
                     <fieldset class="form-group">
                     <legend class="border-bottom mb-4">Input GPX File</legend>
+                    {% if filename or results %}
+                    <div class="alert alert-warning">
+                        <strong>Warning!</strong> Please re-upload GPX file {{ filename }} again.
+                    </div>                      
+                    {% endif %}
                     <div class="form-group">
                         {% if form.gpx_file.errors %}
                             {{ form.gpx_file(class="form-control form-control-lg is-invalid") }}
@@ -167,6 +172,11 @@
                                 document.getElementById('longitude2').value = marker2.getLatLng().lng;
                             });
                         </script>
+                    </div>
+                    <div class="float-right">
+                        <p></p>
+                        <p class="text-muted">Marker 1: Upper left point</p>
+                        <p class="text-muted">Marker 2: Lower right point</p>
                     </div>
                 </div>
             </div>
