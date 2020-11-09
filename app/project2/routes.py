@@ -1,5 +1,5 @@
 from flask import render_template, url_for, flash, redirect, request
-from project2 import app, info, db
+from project2 import app, info
 from project2.forms import InputGPXFileForm, SpeedViolationForm, StopViolationForm, LivenessForm, LoopForm
 from project2.api import parse_gpx_file, distance_travelled, speed_violation, stop_violation, check_liveness, generate_corner_pts, generate_grid_pts, generate_grid_fence, generate_path, generate_route, route_check
 from geojson import Point, Feature
