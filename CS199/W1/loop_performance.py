@@ -7,7 +7,8 @@ import sys
 import time
 from api import parse_gpx_file, generate_corner_pts, generate_grid_fence, generate_path, route_check
 from grid_creation import create_simple_gridmap, create_quadtree_gridmap
-from shapely.geometry import Point, Polygon
+from shapely.geometry import Point
+# from quadtree import Point
 
 def simple_looping(gps_data_vehicle, gps_data_route, grid_fence):
     vehicle_path = generate_path(gps_data_vehicle, grid_fence)

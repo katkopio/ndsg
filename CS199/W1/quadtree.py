@@ -10,7 +10,11 @@ import time
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from api import parse_gpx_file, generate_corner_pts
-from shapely.geometry import Point
+# from shapely.geometry import Point
+class Point():
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
 
 def convert_points(gps_data):
     """
