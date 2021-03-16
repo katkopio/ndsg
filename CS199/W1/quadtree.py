@@ -75,8 +75,9 @@ class QTree():
             ax.add_patch(patches.Rectangle((n.x, n.y), n.width, n.height, fill=False))
         x = [point.x for point in self.points]
         y = [point.y for point in self.points]
-        plt.plot(x, y, 'ro')
+        plt.plot(x, y, marker=".", markersize=1)
         plt.show()
+        plt.savefig(f'Quadtree/{self.threshold[0]} {self.threshold[1]}.png', transparent = True, dpi = 300, bbox_inches='tight')
         return
 
 def recursive_subdivide(node, k):
