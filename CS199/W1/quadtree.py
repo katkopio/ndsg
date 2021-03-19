@@ -4,25 +4,20 @@ Make a quadtree given GPS points
 - User can count number of loops taken
 Reference: https://katherinepully.com/quadtree-python/
 """
-
+import pdb
 import sys
 import time
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-from api import parse_gpx_file, generate_corner_pts
-# from shapely.geometry import Point
-class Point():
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
+from api import parse_gpx_file, generate_corner_pts, Point
 
 def convert_points(gps_data):
     """
-    Converts gps_data into Shapely Point objects
+    Converts gps_data into Point objects
     """
     points = []
     for point in gps_data:
-        coordinate = Point(point.get("longitude"), point.get("latitude"))
+        coordinate = Point(point.get("latitude"), point.get("longitude"))
         points.append(coordinate)
     return points
 
@@ -44,7 +39,7 @@ class Node():
         return self.depth
 
     def contains(self, point):
-        if point.x >= self.x and point.x <= (self.x + self.width) and point.y >= self.y and point.y <= (self.y + self.height):
+        if point.lon >= self.x and point.lon <= (self.x + self.width) and point.lat >= self.y and point.lat <= (self.y + self.height):
             return True
         else:
             return False
@@ -73,8 +68,8 @@ class QTree():
         print(f"Minimum segment area: {min(areas)} units")
         for n in c:
             ax.add_patch(patches.Rectangle((n.x, n.y), n.width, n.height, fill=False))
-        x = [point.x for point in self.points]
-        y = [point.y for point in self.points]
+        x = [point.lon for point in self.points]
+        y = [point.lat for point in self.points]
         plt.plot(x, y, marker=".", markersize=1)
         plt.show()
         plt.savefig(f'Quadtree/{self.threshold[0]} {self.threshold[1]}.png', transparent = True, dpi = 300, bbox_inches='tight')
@@ -117,7 +112,7 @@ def recursive_subdivide(node, k):
 def contains(x, y, w, h, points):
    pts = []
    for point in points:
-       if point.x >= x and point.x <= x+w and point.y>=y and point.y<=y+h:
+       if point.lon >= x and point.lon <= x+w and point.lat>=y and point.lat<=y+h:
            pts.append(point)
    return pts
 
@@ -141,11 +136,10 @@ if __name__ == '__main__':
 
     points = convert_points(gps_data)
     pt1, pt2 = generate_corner_pts(gps_data)
-    min_lat = pt2[0]
-    min_lon = pt1[1]
-    height = pt1[0] - pt2[0]
-    width = pt2[1] - pt1[1]
-
+    min_lat = pt2.lat
+    min_lon = pt1.lon
+    height = pt1.lat - pt2.lat
+    width = pt2.lon - pt1.lon
     root = Node(min_lon, min_lat, width, height, 0, points)
     tree = QTree(k, points, root)
     tree.subdivide()

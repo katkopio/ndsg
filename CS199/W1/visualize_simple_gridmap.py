@@ -5,26 +5,25 @@ import pdb
 
 import gpxpy
 import sys
-from api import parse_gpx_file, generate_corner_pts, generate_grid_fence
-from shapely.geometry import Point, Polygon
+from api import parse_gpx_file, generate_corner_pts, generate_grid_fence, Point
 
 def calculate_dimensions_gridmap(gpx_track, cell_size):
     point1, point2 = generate_corner_pts(gpx_track)
 
     side_interval = cell_size * 0.009
 
-    latitude = point1[0]
-    longitude = point1[1]
+    latitude = point1.lat
+    longitude = point1.lon
 
     height = 0
     width = 0
 
-    while latitude > point2[0]:
-        while longitude < point2[1]:
+    while latitude > point2.lat:
+        while longitude < point2.lon:
             longitude += side_interval
             width +=1
 
-        longitude = point1[1]
+        longitude = point1.lon
         latitude -= side_interval
         height += 1
     return width/float(height), float(height)
@@ -38,17 +37,17 @@ def visualize_simple_gridmap(filename, side_length):
 
     side_interval = side_length * 0.009
 
-    latitude = point1[0]
-    longitude = point1[1]
+    latitude = point1.lat
+    longitude = point1.lon
 
-    while latitude > point2[0] - side_interval:
-        while longitude < point2[1] + side_interval:
+    while latitude > point2.lat - side_interval:
+        while longitude < point2.lon + side_interval:
             wp = gpxpy.gpx.GPXWaypoint()
             wp.latitude = latitude
             wp.longitude = longitude
             gpx.waypoints.append(wp)
             longitude += side_interval
-        longitude = point1[1]
+        longitude = point1.lon
         latitude -= side_interval
     
     with open(f'DS/{filename}.gpx', 'r') as gpx_file:

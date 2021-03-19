@@ -16,10 +16,10 @@ def create_simple_gridmap(gpx_track, cell_size):
 def create_quadtree_gridmap(gps_data, k):
     points = convert_points(gps_data)
     pt1, pt2 = generate_corner_pts(gps_data)
-    min_lat = pt2[0]
-    min_lon = pt1[1]
-    height = pt1[0] - pt2[0]
-    width = pt2[1] - pt1[1]
+    min_lat = pt2.lat
+    min_lon = pt1.lon
+    height = pt1.lat - pt2.lat
+    width = pt2.lon - pt1.lon
 
     # Build Quadtree
     root = Node(min_lon, min_lat, width, height, 0, points)
@@ -47,7 +47,7 @@ if __name__ == "__main__":
     """QUADTREE"""
     t0 = time.time()
     tree = create_quadtree_gridmap(gps_data, k)
-    # tree.graph()
+    # tree[0].graph()
     t1 = time.time()
     total = t1-t0
 

@@ -5,10 +5,8 @@ Note: this includes time to generate grid map of trajectory and route
 """
 import sys
 import time
-from api import parse_gpx_file, generate_corner_pts, generate_grid_fence, generate_path, route_check
+from api import parse_gpx_file, generate_corner_pts, generate_grid_fence, generate_path, route_check, Point
 from grid_creation import create_simple_gridmap, create_quadtree_gridmap
-from shapely.geometry import Point
-# from quadtree import Point
 
 def simple_looping(gps_data_vehicle, gps_data_route, grid_fence):
     vehicle_path = generate_path(gps_data_vehicle, grid_fence)
@@ -17,24 +15,10 @@ def simple_looping(gps_data_vehicle, gps_data_route, grid_fence):
     return loops
 
 def quadtree_looping(gps_data_vehicle, gps_data_route, grid_cells):
-    vehicle_path = generate_quad_path(gps_data_vehicle, grid_cells)
-    route_path = generate_quad_path(gps_data_route, grid_cells)
+    vehicle_path = generate_path(gps_data_vehicle, grid_cells)
+    route_path = generate_path(gps_data_route, grid_cells)
     loops = route_check(route_path, vehicle_path)
     return loops
-
-def generate_quad_path(gps_data, grid_fence):
-    path = []
-    current_fence = -1
-
-    for point in gps_data:
-        pt = Point(point.get('longitude'), point.get('latitude'))
-        for i in range(len(grid_fence)):
-            if grid_fence[i].contains(pt):
-                if current_fence != i:
-                    current_fence = i 
-                    path.append(i)
-                    break
-    return path
 
 if __name__ == "__main__":
     gpx_track = "ds1"
