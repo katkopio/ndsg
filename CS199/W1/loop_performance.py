@@ -8,15 +8,9 @@ import time
 from api import parse_gpx_file, generate_corner_pts, generate_grid_fence, generate_path, route_check, Point
 from grid_creation import create_simple_gridmap, create_quadtree_gridmap
 
-def simple_looping(gps_data_vehicle, gps_data_route, grid_fence):
+def looping(gps_data_vehicle, gps_data_route, grid_fence):
     vehicle_path = generate_path(gps_data_vehicle, grid_fence)
     route_path = generate_path(gps_data_route, grid_fence)
-    loops = route_check(route_path, vehicle_path)
-    return loops
-
-def quadtree_looping(gps_data_vehicle, gps_data_route, grid_cells):
-    vehicle_path = generate_path(gps_data_vehicle, grid_cells)
-    route_path = generate_path(gps_data_route, grid_cells)
     loops = route_check(route_path, vehicle_path)
     return loops
 
@@ -36,7 +30,7 @@ if __name__ == "__main__":
 
     # # Count Loops
     # t0 = time.time()
-    # loops = simple_looping(gps_data_vehicle, gps_data_route, grid_cells)
+    # loops = looping(gps_data_vehicle, gps_data_route, grid_cells)
     # t1 = time.time()
     # total = t1-t0
     # print(f"[{gpx_track}] {cell_size}km Simple Grid: {loops} loops, {total}")
@@ -51,7 +45,7 @@ if __name__ == "__main__":
     # Count Loops
     t0 = time.time()
 
-    loops = quadtree_looping(gps_data_vehicle, gps_data_route, grid_cells)
+    loops = looping(gps_data_vehicle, gps_data_route, grid_cells)
     
     t1 = time.time()
     total = t1-t0
