@@ -39,7 +39,7 @@ def create_geojson_feature(gps_data):
         
     return geojson
 
-def generate_corner_pts(gps_data):
+def generate_corner_pts(gps_data, buffer=0.1):
     greatest_lat = gps_data[0].get('latitude')
     least_lat = gps_data[0].get('latitude')
     greatest_long = gps_data[0].get('longitude')
@@ -59,11 +59,11 @@ def generate_corner_pts(gps_data):
         elif point_long < least_long:
             least_long = point_long
 
-    # 100 meters 
-    greatest_lat += 0.0009
-    least_long -= 0.0009
-    least_lat -= 0.0009
-    greatest_long += 0.0009
+    # 1km * buffer, buffer by default is 0.1 (100m), buffer is set to cell_size
+    greatest_lat += 0.009 * buffer
+    least_long -= 0.009 * buffer
+    least_lat -= 0.009 * buffer
+    greatest_long += 0.009 * buffer
 
     return Point(greatest_lat, least_long), Point(least_lat, greatest_long)
 
@@ -279,18 +279,22 @@ def generate_grid_fence(point1, point2, side_length):
     latitude = point1.lat
     longitude = point1.lon
 
-    while latitude > point2.lat:
-        while longitude < point2.lon:
+    while latitude > point2.lat - side_interval:
+        row = []
+
+        while longitude < point2.lon + side_interval:
             top_left_pt = Point(latitude, longitude)
             bottom_right_pt = Point(latitude - side_interval, longitude + side_interval)
 
             geofence = Polygon(top_left_pt, bottom_right_pt)
-            grid_fence.append(geofence)
+            row.append(geofence)
 
             longitude += side_interval
 
         longitude = point1.lon
         latitude -= side_interval
+
+        grid_fence.append(row)
 
     return grid_fence
 
@@ -298,14 +302,29 @@ def generate_path(gps_data, grid_fence):
     path = []
     current_fence = -1
 
-    for point in gps_data:
-        pt = Point(point.get('latitude'), point.get('longitude'))
-        for i in range(len(grid_fence)):
-            if grid_fence[i].contains(pt):
-                if current_fence != i:
-                    current_fence = i 
-                    path.append(i)
-                    break
+    if isinstance(grid_fence[0], list):
+        for point in gps_data:
+            pt = Point(point.get('latitude'), point.get('longitude'))
+            for i in range(len(grid_fence)):
+                for j in range(len(grid_fence[0])):
+                    if grid_fence[i][j].contains(pt):
+                        fence_number = i * len(grid_fence[0]) + j
+                        if current_fence != fence_number:
+                            current_fence = fence_number
+                            path.append(fence_number)
+                            break
+                else:
+                    continue
+                break
+    else:
+        for point in gps_data:
+            pt = Point(point.get('latitude'), point.get('longitude'))
+            for i in range(len(grid_fence)):
+                if grid_fence[i].contains(pt):
+                    if current_fence != i:
+                        current_fence = i 
+                        path.append(i)
+                        break
 
     return path
 
