@@ -71,8 +71,8 @@ class QTree():
         x = [point.lon for point in self.points]
         y = [point.lat for point in self.points]
         plt.plot(x, y, marker=".", markersize=1)
+        # plt.savefig(f'Quadtree/{self.threshold[0]} {self.threshold[1]}.png', transparent = True, dpi = 300, bbox_inches='tight')
         plt.show()
-        plt.savefig(f'Quadtree/{self.threshold[0]} {self.threshold[1]}.png', transparent = True, dpi = 300, bbox_inches='tight')
         return
 
 def recursive_subdivide(node, k):
@@ -128,10 +128,9 @@ def find_children(node):
 if __name__ == '__main__':
     t0 = time.time()
 
-    # Build Quadtree
-    # k = ("depth", 5)
-    k = ("points", 200)
-    gpx_file_location = open('DS/ds1.gpx', 'r')
+    k = ("depth", 5)
+    # k = ("points", 150)
+    gpx_file_location = open(f'DS/ds2.gpx', 'r')
     gps_data = parse_gpx_file(gpx_file_location)
 
     points = convert_points(gps_data)
