@@ -26,4 +26,4 @@ if __name__ == '__main__':
     with open('../DS/ds1.gpx', 'r') as gpx_file_location:
         avg_time = find_sampling_time(gpx_file_location)
     
-    print(avg_time)
+    print(f"Samples a point every {avg_time} seconds")
