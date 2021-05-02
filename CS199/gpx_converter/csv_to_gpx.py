@@ -19,7 +19,7 @@ def convert_to_gpx(data, i):
     print("<trkseg>")
 
     for datum in data:
-        date_time_obj = datetime.strptime(datum[i["datetime"]], '%Y-%m-%d %H:%M:%S')
+        date_time_obj = datetime.strptime(datum[i["datetime"]], '%m/%d/%y %H:%M')
         print(f"<trkpt lat=\"{datum[i['lat']]}\" lon=\"{datum[i['lon']]}\">")
         print(f"\t<time>{date_time_obj.isoformat()}</time>")
         print(f"\t<speed>{datum[i['speed']]}</speed>")
@@ -30,8 +30,8 @@ def convert_to_gpx(data, i):
     print("</gpx>")
 
 if __name__ == "__main__":
-    csv_file = "EDSA_bus"
-    file_name = f"{csv_file}.csv"
+    csv_file = "DS7-6-0426"
+    file_name = f"CSV/{csv_file}.csv"
     data = read_csv(file_name)
     index = {
         "datetime": 1,
@@ -41,7 +41,7 @@ if __name__ == "__main__":
     }
 
     original_stdout = sys.stdout
-    with open(f"{csv_file}.gpx", 'w') as f:
+    with open(f"GPX/{csv_file}.gpx", 'w') as f:
         sys.stdout = f 
         convert_to_gpx(data, index)
         sys.stdout = original_stdout
