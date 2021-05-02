@@ -1,18 +1,10 @@
 # CS 198/199 NDSG
 Katrina Kopio & Makki Villaluz
 
-## Creating Virtual Environment
+## Creating Virtual Environment and Install requirements.txt
 ```
-cd code
-virtualenv <folder>
-source <folder>/bin/activate
-```
-
-## Install requirements.txt
-Navigate into `code` directory
-```
+cd ndsg
+virtualenv venv
+source venv/bin/activate
 pip install -r requirements.txt
 ```
-
-## Using the Repository
-All source codes will go to the `code` folder, separated by `week`, so we can have a copy of each individual week's progress.
