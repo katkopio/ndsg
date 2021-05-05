@@ -17,9 +17,9 @@ def func1():
 def func2(pid):
     pr = psutil.Process(pid=pid)
     # print('func2: starting')
-    print("time,cpupercent,cputime,meminfo,mempercent")
+    print("type,time,cpupercent,cputime_user,cputime_system,rss,vms,pfaults,pageins,mempercent")
     while psutil.pid_exists(pid):
-        print(f"{datetime.now()},{pr.cpu_percent()},{pr.cpu_times()},{pr.memory_info()},{pr.memory_percent()}")
+        print(f"1,{datetime.now()},{pr.cpu_percent()},{pr.cpu_times().user},{pr.cpu_times().system},{pr.memory_info().rss},{pr.memory_info().vms},{pr.memory_info().pfaults},{pr.memory_info().pageins},{pr.memory_percent()}")
         time.sleep(0.1)
     # print('func2: finishing')
 
