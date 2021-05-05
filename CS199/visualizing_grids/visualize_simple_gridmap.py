@@ -29,7 +29,7 @@ def calculate_dimensions_gridmap(gpx_track, cell_size):
     return width/float(height), float(height)
 
 def visualize_simple_gridmap(filename, side_length):
-    with open(f'DS/{filename}.gpx', 'r') as gpx_file:
+    with open(f'../../DS/{filename}.gpx', 'r') as gpx_file:
         gpx_track = parse_gpx_file(gpx_file)
     point1, point2 = generate_corner_pts(gpx_track)
     
@@ -50,7 +50,7 @@ def visualize_simple_gridmap(filename, side_length):
         longitude = point1.lon
         latitude -= side_interval
     
-    with open(f'DS/{filename}.gpx', 'r') as gpx_file:
+    with open(f'../../DS/{filename}.gpx', 'r') as gpx_file:
         gpx_vehicle = gpxpy.parse(gpx_file)
 
         gpx_track = gpxpy.gpx.GPXTrack()
@@ -75,7 +75,7 @@ if __name__ == "__main__":
     cell_size = float(cell)
     filename = "ds1"
 
-    with open(f'DS/{filename}.gpx', 'r') as gpx_file:
+    with open(f'../../DS/{filename}.gpx', 'r') as gpx_file:
         gpx_track = parse_gpx_file(gpx_file)
 
     # Functions
