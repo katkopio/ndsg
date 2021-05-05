@@ -108,6 +108,7 @@ def generate_path(gps_data, grid_fence):
             for i in range(len(grid_fence)):
                 for j in range(len(grid_fence[0])):
                     if grid_fence[i][j].contains(pt):
+                        timestamp("in process: loop counting")
                         fence_number = i * len(grid_fence[0]) + j
                         if current_fence != fence_number:
                             current_fence = fence_number
@@ -121,6 +122,7 @@ def generate_path(gps_data, grid_fence):
             pt = Point(point.get('latitude'), point.get('longitude'))
             for i in range(len(grid_fence)):
                 if grid_fence[i].contains(pt):
+                    timestamp("in process: loop counting")
                     if current_fence != i:
                         current_fence = i 
                         path.append(i)
@@ -159,6 +161,7 @@ def timestamp(comment):
 
 def main():
     # Open Files
+    timestamp("opening file")
     filename = "test"
     with open(f'../../DS/{filename}.gpx', 'r') as gpx_file_location:
         gps_data = parse_gpx_file(gpx_file_location)
@@ -167,20 +170,21 @@ def main():
     with open(f'../../DS/{gpx_route}.gpx', 'r') as gpx_file:
         gps_route = parse_gpx_file(gpx_file)
 
-    timestamp("about to create grid")
-
     # Create Simple Grid Map 
     cell_size = 0.1
+    timestamp("generating corner points")
     point1, point2 = generate_corner_pts(gps_data)
+    timestamp("generating grid fence")
     grid_cells = generate_grid_fence(point1, point2, cell_size)
 
-    timestamp("about to loop")
 
     # Loop Count
+    timestamp("generating path of vehicle")
     vehicle_path = generate_path(gps_data, grid_cells)
+    timestamp("generating route")
     route_path = generate_path(gps_route, grid_cells)
+    timestamp("about to loop count")
     loops = route_check(route_path, vehicle_path)
-
     timestamp("done looping")
 
 if __name__ == "__main__":
