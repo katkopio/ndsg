@@ -1,5 +1,7 @@
-
-
+""" 
+This code generates CPU/Mem Time Series data for simple grids
+Code is copy pasted from the API module in order to easily add time stamps
+"""
 import os, psutil, time, gpxpy
 from datetime import datetime
 from multiprocessing import Process
@@ -108,7 +110,7 @@ def generate_path(gps_data, grid_fence):
             for i in range(len(grid_fence)):
                 for j in range(len(grid_fence[0])):
                     if grid_fence[i][j].contains(pt):
-                        timestamp("in process: loop counting")
+                        # timestamp("in process: loop counting")
                         fence_number = i * len(grid_fence[0]) + j
                         if current_fence != fence_number:
                             current_fence = fence_number
@@ -122,7 +124,7 @@ def generate_path(gps_data, grid_fence):
             pt = Point(point.get('latitude'), point.get('longitude'))
             for i in range(len(grid_fence)):
                 if grid_fence[i].contains(pt):
-                    timestamp("in process: loop counting")
+                    # timestamp("in process: loop counting")
                     if current_fence != i:
                         current_fence = i 
                         path.append(i)
@@ -151,7 +153,6 @@ def route_check(set_route, vehicle_route):
 
 def analyze(pid):
     pr = psutil.Process(pid=pid)
-    print("type,time,cpupercent,cputime_user,cputime_system,rss,vms,pfaults,pageins,mempercent")
     while psutil.pid_exists(pid):
         print(f"1,{datetime.now()},{pr.cpu_percent()},{pr.cpu_times().user},{pr.cpu_times().system},{pr.memory_info().rss},{pr.memory_info().vms},{pr.memory_info().pfaults},{pr.memory_info().pageins},{pr.memory_percent()}")
         time.sleep(0.1)
@@ -188,6 +189,7 @@ def main():
     timestamp("done looping")
 
 if __name__ == "__main__":
+    print("type,time,cpupercent,cputime_user,cputime_system,rss,vms,pfaults,pageins,mempercent")
     p1 = Process(target=main)
     p1.start()
     p2 = Process(target=analyze, args=(p1.pid,))
