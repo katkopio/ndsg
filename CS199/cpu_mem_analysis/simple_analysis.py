@@ -185,7 +185,6 @@ def main():
     route_path = generate_path(gps_route, grid_cells)
     timestamp("loop counting")
     loops = route_check(route_path, vehicle_path)
-    timestamp("done")
 
 if __name__ == "__main__":
     print("type,time,cpupercent,cputime_user,cputime_system,rss,vms,pfaults,pageins,mempercent")
@@ -196,3 +195,4 @@ if __name__ == "__main__":
 
     p1.join()
     p2.join()
+    timestamp("done")
