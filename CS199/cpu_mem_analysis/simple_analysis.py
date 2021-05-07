@@ -173,9 +173,8 @@ def main():
 
     # Create Simple Grid Map 
     cell_size = 0.1
-    timestamp("generating corner points")
+    timestamp("generating simple grid")
     point1, point2 = generate_corner_pts(gps_data)
-    timestamp("generating grid fence")
     grid_cells = generate_grid_fence(point1, point2, cell_size)
 
 
@@ -184,9 +183,9 @@ def main():
     vehicle_path = generate_path(gps_data, grid_cells)
     timestamp("generating route")
     route_path = generate_path(gps_route, grid_cells)
-    timestamp("about to loop count")
+    timestamp("loop counting")
     loops = route_check(route_path, vehicle_path)
-    timestamp("done looping")
+    timestamp("done")
 
 if __name__ == "__main__":
     print("type,time,cpupercent,cputime_user,cputime_system,rss,vms,pfaults,pageins,mempercent")

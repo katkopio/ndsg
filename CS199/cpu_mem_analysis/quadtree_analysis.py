@@ -255,21 +255,17 @@ def main():
     # Create Quadtree
     k = ("points", 200)
     k = ("depth", 5)
-
-    timestamp("converting gpx to point objects")
+    
+    timestamp("generating quadtree")
     points = convert_points(gps_data)
-    timestamp("generating corner points")
     pt1, pt2 = generate_corner_pts(gps_data)
     min_lat = pt2.lat
     min_lon = pt1.lon
     height = pt1.lat - pt2.lat
     width = pt2.lon - pt1.lon
-    timestamp("create root node")
     root = Node(min_lon, min_lat, width, height, 0, points)
-    timestamp("building tree")
     tree = QTree(k, points, root)
     tree.subdivide()
-    timestamp("generating grid fence")
     grid_cells = tree.get_cells()
 
     # Loop Count
@@ -277,9 +273,9 @@ def main():
     vehicle_path = generate_path(gps_data, grid_cells)
     timestamp("generating route")
     route_path = generate_path(gps_route, grid_cells)
-    timestamp("about to loop count")
+    timestamp("loop counting")
     loops = route_check(route_path, vehicle_path)
-    timestamp("done looping")
+    timestamp("done")
 
 if __name__ == '__main__':
     print("type,time,cpupercent,cputime_user,cputime_system,rss,vms,pfaults,pageins,mempercent")
