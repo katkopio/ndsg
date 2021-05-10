@@ -244,12 +244,21 @@ def create_quadtree_gridmap(gps_data, k):
     return tree, grid_cells
 
 if __name__ =='__main__':
+    # Open Files
     filename = "ds1"
     with open(f'../../DS/{filename}.gpx', 'r') as gpx_file_location:
         gps_data = parse_gpx_file(gpx_file_location)
 
+    gpx_route = "ds1_route"
+    with open(f'../../DS/{gpx_route}.gpx', 'r') as gpx_file:
+        gps_route = parse_gpx_file(gpx_file)
+
+    # Create Quadtree
     # k = ("points", 200)
     k = ("depth", 5)
 
-    tree, grid_cells = create_quadtree_gridmap(gps_data, k)
-    tree.graph()
+    tree, grid_cells = create_quadtree_gridmap(gps_route, k)
+
+    vehicle_path = generate_path(gps_data, grid_cells)
+    route_path = generate_path(gps_route, grid_cells)
+    loops = route_check(route_path, vehicle_path)
