@@ -19,7 +19,8 @@ def convert_to_gpx(data, i):
     print("<trkseg>")
 
     for datum in data:
-        date_time_obj = datetime.strptime(datum[i["datetime"]], '%m/%d/%y %H:%M')
+        # date_time_obj = datetime.strptime(datum[i["datetime"]], '%m/%d/%y %H:%M')
+        date_time_obj = datetime.strptime(datum[i["datetime"]], '%Y-%m-%d %H:%M:%S')
         print(f"<trkpt lat=\"{datum[i['lat']]}\" lon=\"{datum[i['lon']]}\">")
         print(f"\t<time>{date_time_obj.isoformat()}</time>")
         print(f"\t<speed>{datum[i['speed']]}</speed>")
