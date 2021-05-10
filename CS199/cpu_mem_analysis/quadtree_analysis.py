@@ -254,7 +254,7 @@ def main():
 
     # Create Quadtree
     k = ("points", 200)
-    k = ("depth", 5)
+    k = ("depth", 9)
     
     timestamp("generating quadtree")
     points = convert_points(gps_data)

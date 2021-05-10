@@ -172,7 +172,7 @@ def main():
         gps_route = parse_gpx_file(gpx_file)
 
     # Create Simple Grid Map 
-    cell_size = 0.1
+    cell_size = 0.15
     timestamp("generating simple grid")
     point1, point2 = generate_corner_pts(gps_data)
     grid_cells = generate_grid_fence(point1, point2, cell_size)
