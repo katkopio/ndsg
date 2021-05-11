@@ -1,7 +1,7 @@
 """ 
 Code is copy pasted from API and Quadtree modules for easier modifications without touching base code
 """
-import gpxpy
+import gpxpy, pdb
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
@@ -247,7 +247,7 @@ if __name__ =='__main__':
     # Open Files
     filename = "ds1"
     with open(f'../../DS/{filename}.gpx', 'r') as gpx_file_location:
-        gps_data = parse_gpx_file(gpx_file_location)
+        gps_traj = parse_gpx_file(gpx_file_location)
 
     gpx_route = "ds1_route"
     with open(f'../../DS/{gpx_route}.gpx', 'r') as gpx_file:
@@ -255,10 +255,11 @@ if __name__ =='__main__':
 
     # Create Quadtree
     # k = ("points", 200)
-    k = ("depth", 5)
+    k = ("depth", 3)
 
-    tree, grid_cells = create_quadtree_gridmap(gps_route, k)
+    tree, grid_cells = create_quadtree_gridmap(gps_traj, k)
 
-    vehicle_path = generate_path(gps_data, grid_cells)
+    vehicle_path = generate_path(gps_traj, grid_cells)
     route_path = generate_path(gps_route, grid_cells)
     loops = route_check(route_path, vehicle_path)
+    print(loops)
