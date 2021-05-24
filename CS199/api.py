@@ -298,6 +298,33 @@ def generate_grid_fence(point1, point2, side_length):
 
     return grid_fence
 
+def generate_grid_fence_2D(point1, point2, side_length):
+    grid_fence = []
+
+    side_interval = side_length * 0.009
+
+    latitude = point1.lat
+    longitude = point1.lon
+
+    while latitude > point2.lat:
+        row = []
+
+        while longitude < point2.lon:
+            top_left_pt = Point(latitude, longitude)
+            bottom_right_pt = Point(latitude - side_interval, longitude + side_interval)
+
+            geofence = Polygon(top_left_pt, bottom_right_pt)
+            row.append(geofence)
+
+            longitude += side_interval
+
+        longitude = point1.lon
+        latitude -= side_interval
+
+        grid_fence.append(row)
+
+    return grid_fence
+
 def generate_path(gps_data, grid_fence):
     path = []
     current_fence = -1
