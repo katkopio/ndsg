@@ -39,7 +39,7 @@ def list_slice(word, substring):
     words = [word[index[i]:index[i+1]] for i in range(len(index)-1)]
     return words
 
-def loop_counting(route, traj):
+def loop_counting(route, traj, grid_cells):
     errors = 0
     loops = 0
     r = 0
@@ -64,7 +64,7 @@ def loop_counting(route, traj):
             # "Foreign" Errors
             elif ind == -1:
                 i, r, detour, missed_route = detour_info(i, r, route, traj)
-                errors += check_tolerance(detour, missed_route)
+                errors += check_siblings(detour, missed_route, grid_cells)
         if r == len(route):
             r = r % len(route)
             if errors == 0:
@@ -112,8 +112,21 @@ def detour_info(i, r, route, traj):
     # print(i, r, detour, missed_route)
     return i, r, detour, missed_route
 
-def check_tolerance(detour, missed_route):
-    return 1
+def check_siblings(detour, missed_route, grid_cells):
+    match = False
+    err = 0
+
+    for d in detour:
+        for r in missed_route:
+            if grid_cells[r] in grid_cells[d].siblings:
+                match = True 
+                break
+            else:
+                match = False 
+        if match == False:
+            err = 1
+            break 
+    return err
 
 def find_current_index(cell, route_list):
     # Find what index in the route_list the trajectory cell exists in
@@ -133,17 +146,11 @@ if __name__ =='__main__':
         gps_route = parse_gpx_file(gpx_file)
 
     # Create Quadtree
-    k = ("depth", 5)
+    k = ("depth", 7)
     tree, grid_cells = create_quadtree_gridmap(gps_traj, k)
 
     # Generate List of Cell Numbers
     vehicle_path = generate_path(gps_traj, grid_cells)
     route_path = generate_path(gps_route, grid_cells)
 
-    # Generate List of Cell Objects
-    # vehicle_path = generate_quad_path(gps_traj, grid_cells)
-    # route_path = generate_quad_path(gps_route, grid_cells)
-
-    # loops = substring(route_path, vehicle_path)
-
-    print(f"LOOPS: {loop_counting(route_path, vehicle_path)}")
+    print(f"LOOPS: {loop_counting(route_path, vehicle_path, grid_cells)}")
