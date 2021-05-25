@@ -129,15 +129,32 @@ def find_current_index(cell, route_list):
             return i
     return -1
 
+def generate_data(gps_traj, gps_route):
+    loops = []
+    loops_tol = []
+    cell_sizes = [0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95,1]
+
+    for cell_size in cell_sizes:
+        grid_cells = create_simple_gridmap(gps_traj, cell_size)
+        vehicle_path = generate_path(gps_traj, grid_cells)
+        route_path = generate_path(gps_route, grid_cells)
+        loops.append(route_check(route_path, vehicle_path))
+        loops_tol.append(loop_counting(route_path, vehicle_path, grid_cells))
+
+    print(loops)
+    print(loops_tol)
+
 if __name__ =='__main__':
     # Open Files
     filename = "ds1"
-    with open(f'../DS/{filename}.gpx', 'r') as gpx_file_location:
+    with open(f'../../DS/{filename}.gpx', 'r') as gpx_file_location:
         gps_traj = parse_gpx_file(gpx_file_location)
 
     gpx_route = "ds1_route"
-    with open(f'../DS/{gpx_route}.gpx', 'r') as gpx_file:
+    with open(f'../../DS/{gpx_route}.gpx', 'r') as gpx_file:
         gps_route = parse_gpx_file(gpx_file)
+
+    # generate_data(gps_traj, gps_route)
 
     # Create Simple Grid Map
     cell_size = 0.55
