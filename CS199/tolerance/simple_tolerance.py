@@ -83,7 +83,7 @@ def check_neighbors(detour, missed_route, grid_cells):
 
     for d in detour:
         for r in missed_route:
-            if r in adjacent_cells(d, width, length):
+            if d in adjacent_cells(r, width, length):
                 match = True 
                 break
             else:

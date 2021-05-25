@@ -118,7 +118,7 @@ def check_siblings(detour, missed_route, grid_cells):
 
     for d in detour:
         for r in missed_route:
-            if grid_cells[r] in grid_cells[d].siblings:
+            if grid_cells[d] in grid_cells[r].siblings:
                 match = True 
                 break
             else:
