@@ -170,8 +170,6 @@ def generate_latex(title, depths, xmin, xmax, xlabel, ymin, ytick, ysize, loops,
     print("axis lines*=middle,")
     print("ylabel={Number of Loops},")
     print("width=\\textwidth * 0.5,")
-    print("x tick label style={rotate=45,anchor=east},")
-    print("xticklabel style={font=\small},")
     print("legend cell align=left,")
     print("legend style={at={(0.5,-0.15)}, anchor=north,legend columns=-1},")
     print(f"title={title},")
@@ -188,12 +186,12 @@ def generate_latex(title, depths, xmin, xmax, xlabel, ymin, ytick, ysize, loops,
     print(f"xmin={xmin},")
     print(f"xmax={xmax},")
     print(f"ymin={ymin}]")
-    print(f"\\addplot[fill=cyan,draw=none, bar shift=-{float(ysize)/2}cm]")
+    print(f"\\addplot[fill=clr1,draw=none, bar shift=-{float(ysize)/2}cm]")
     loop_coords = ""
     for c in loops:
         loop_coords += str(c) + " "
     print("coordinates {",loop_coords[:-1],"};")
-    print(f"\\addplot[fill=teal, draw=none, bar shift={float(ysize)/2}cm]")
+    print(f"\\addplot[fill=clr2, draw=none, bar shift={float(ysize)/2}cm]")
     loop_coords_tol = ""
     for c in loops_tol:
         loop_coords_tol += str(c) + " "
@@ -205,7 +203,7 @@ def generate_latex(title, depths, xmin, xmax, xlabel, ymin, ytick, ysize, loops,
 if __name__ =='__main__':
     filename = "ds1"
     gpx_route = "ds1_route"
-    ysize = 0.1
+    ysize = 0.2
     correct_num_loops = 2
     depths = [1,2,3,4,5,6,7]
     title = "Some Title"
