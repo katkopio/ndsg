@@ -5,7 +5,7 @@ def generate_latex(gps_data, time_limit, caption, label):
     violations = segments.get("segments")
     lst = []
     for v in violations:
-        lst.append([v.get("liveness"), v.get("time1").strftime("%a, %d %b %Y"), v.get("time1").strftime("%H:%M:%S GMT"), v.get("time2").strftime("%a, %d %b"), v.get("time2").strftime("%Y %H:%M:%S GMT")])
+        lst.append([v.get("liveness"), v.get("time1").strftime("%a, %d %b %Y"), v.get("time1").strftime("%H:%M:%S GMT"), v.get("time2").strftime("%a, %d %b %Y"), v.get("time2").strftime("%H:%M:%S GMT")])
 
     print("\\begin{table}[ht]")
     print("\\centering")

@@ -6,7 +6,7 @@ def generate_latex(gps_data, caption, label, v_type, s, t):
 
     lst = []
     for v in violations:
-        lst.append([v.get("duration"), v.get("time1").strftime("%a, %d %b %Y"), v.get("time1").strftime("%H:%M:%S GMT"), v.get("time2").strftime("%a, %d %b"), v.get("time2").strftime("%Y %H:%M:%S GMT")])
+        lst.append([v.get("duration"), v.get("time1").strftime("%a, %d %b %Y"), v.get("time1").strftime("%H:%M:%S GMT"), v.get("time2").strftime("%a, %d %b %Y"), v.get("time2").strftime("%H:%M:%S GMT")])
 
     print("\\begin{table}[ht]")
     print("\\centering")
@@ -34,12 +34,12 @@ if __name__ == '__main__':
         t = 0.5
 
         v_type = "Explicit"
-        caption =  f"DS 2 {dates[i]} - {v_type}" if i != 6 else f"Dataset 1 - {v_type}"
+        caption =  f"DS 2 {dates[i]} - {v_type}" if i != 6 else f"DS 1 - {v_type}"
         label = f"{dates[i]}speedingexplicit" if i != 6 else "ds1speedingexplicit"
         generate_latex(gps_data, caption, label, v_type, s, t)
     
         v_type = "Location"
-        caption =  f"DS 2 {dates[i]} - {v_type}" if i != 6 else f"Dataset 1 - {v_type}"
+        caption =  f"DS 2 {dates[i]} - {v_type}" if i != 6 else f"DS 1 - {v_type}"
         label = f"{dates[i]}speedinglocation" if i != 6 else "ds1speedinglocation"
         generate_latex(gps_data, caption, label, v_type, s, t)
         print()
