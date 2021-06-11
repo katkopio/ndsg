@@ -153,6 +153,35 @@ def generate_data(gps_traj, gps_route):
     print(loops)
     print(loops_tol)
 
+def quad_test():
+    filename = "ds1"
+    with open(f'../DS/{filename}.gpx', 'r') as gpx_file_location:
+        gps_traj = parse_gpx_file(gpx_file_location)
+
+    gpx_route = "ds1_route"
+    with open(f'../DS/{gpx_route}.gpx', 'r') as gpx_file:
+        gps_route = parse_gpx_file(gpx_file)
+
+    loops = []
+    loops_tol = []
+    depths = [1,2,3,4,5,6,7]
+    
+    for num in depths:
+        # Create Quadtree
+        k = ("depth", num)
+        tree, grid_cells = create_quadtree_gridmap(gps_traj, k)
+        vehicle_path = generate_path(gps_traj, grid_cells)
+        route_path = generate_path(gps_route, grid_cells)
+        loops.append(route_check(route_path, vehicle_path))
+        loops_tol.append(loop_counting(route_path, vehicle_path, grid_cells))
+
+    if loops == [3, 2, 2, 1, 1, 1, 1] and loops_tol == [3, 3, 2, 2, 3, 1, 1]: 
+        print("Test Passed")
+    else:
+        print(loops)
+        print(loops_tol)
+        print("Test Failed")
+
 def main(gps_traj, gps_route):
     # Create Quadtree
     k = ("depth", 7)

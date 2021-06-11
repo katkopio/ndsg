@@ -1,6 +1,7 @@
-import pdb
-from api import parse_gpx_file, generate_corner_pts, generate_path, route_check
-from grid_creation import create_simple_gridmap
+import gpxpy
+from api import Point, parse_gpx_file, generate_corner_pts, generate_path, route_check
+from quadtree import convert_points, Node, QTree, recursive_subdivide, contains, find_children
+from grid_creation import create_simple_gridmap, create_quadtree_gridmap
 
 def loop_counting(route, traj, grid_cells):
     errors = 0
@@ -78,22 +79,29 @@ def check_neighbors(detour, missed_route, grid_cells):
     match = False
     err = 0
 
-    width = len(grid_cells[0])
-    length = len(grid_cells) * len(grid_cells[0])
-
     for d in detour:
         for r in missed_route:
-            if d in adjacent_cells(r, width, length):
-                match = True 
-                break
+            if hasattr(grid_cells[0], 'siblings') == True:
+                if grid_cells[d] in grid_cells[r].siblings:
+                    match = True 
+                    break
+                else:
+                    match = False 
             else:
-                match = False 
+                if d in adjacent_cells(r, grid_cells):
+                    match = True 
+                    break
+                else:
+                    match = False 
         if match == False:
             err = 1
             break 
     return err
 
-def adjacent_cells(d, w, l):
+def adjacent_cells(d, grid_cells):
+    w = len(grid_cells[0])
+    l = len(grid_cells) * len(grid_cells[0])
+
     # Top Left
     if d == 0:
         return [d+1, d+w, d+w+1]
@@ -129,51 +137,7 @@ def find_current_index(cell, route_list):
             return i
     return -1
 
-def generate_data(gps_traj, gps_route):
-    loops = []
-    loops_tol = []
-    # cell_sizes = [0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95,1]
-    cell_sizes = [1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10]
-
-    for cell_size in cell_sizes:
-        grid_cells = create_simple_gridmap(gps_traj, cell_size)
-        vehicle_path = generate_path(gps_traj, grid_cells)
-        route_path = generate_path(gps_route, grid_cells)
-        loops.append(route_check(route_path, vehicle_path))
-        loops_tol.append(loop_counting(route_path, vehicle_path, grid_cells))
-
-    print(cell_sizes)
-    print(loops)
-    print(loops_tol)
-
-def simple_test():
-    filename = "ds1"
-    with open(f'../DS/{filename}.gpx', 'r') as gpx_file_location:
-        gps_traj = parse_gpx_file(gpx_file_location)
-
-    gpx_route = "ds1_route"
-    with open(f'../DS/{gpx_route}.gpx', 'r') as gpx_file:
-        gps_route = parse_gpx_file(gpx_file)
-
-    loops = []
-    loops_tol = []
-    cell_sizes = [0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95,1]
-
-    for cell_size in cell_sizes:
-        grid_cells = create_simple_gridmap(gps_traj, cell_size)
-        vehicle_path = generate_path(gps_traj, grid_cells)
-        route_path = generate_path(gps_route, grid_cells)
-        loops.append(route_check(route_path, vehicle_path))
-        loops_tol.append(loop_counting(route_path, vehicle_path, grid_cells))
-
-    if loops == [1, 2, 1, 2, 3, 2, 1, 3, 3, 3, 3, 2, 2, 2, 2, 3, 3, 3, 3] and loops_tol == [2, 2, 2, 2, 3, 2, 2, 3, 3, 3, 3, 2, 3, 3, 4, 4, 3, 3, 3]:
-        print("Test Passed")
-    else:
-        print(loops)
-        print(loops_tol)
-        print("Test Failed")
- 
-def main(gps_traj, gps_route):
+def simple_tolerance():
     # Create Simple Grid Map
     cell_size = 0.55
     grid_cells = create_simple_gridmap(gps_traj, cell_size)
@@ -184,15 +148,27 @@ def main(gps_traj, gps_route):
 
     print(f"LOOPS: {loop_counting(route_path, vehicle_path, grid_cells)}")
 
+def quad_tolerance():
+    # # Create Quadtree
+    k = ("depth", 3)
+    tree, grid_cells = create_quadtree_gridmap(gps_traj, k)
+
+    # Generate List of Cell Numbers
+    vehicle_path = generate_path(gps_traj, grid_cells)
+    route_path = generate_path(gps_route, grid_cells)
+
+    print(f"LOOPS: {loop_counting(route_path, vehicle_path, grid_cells)}")
+
 if __name__ =='__main__':
     # Open Files
     filename = "ds1"
-    with open(f'../../DS/{filename}.gpx', 'r') as gpx_file_location:
+    with open(f'../DS/{filename}.gpx', 'r') as gpx_file_location:
         gps_traj = parse_gpx_file(gpx_file_location)
 
     gpx_route = "ds1_route"
-    with open(f'../../DS/{gpx_route}.gpx', 'r') as gpx_file:
+    with open(f'../DS/{gpx_route}.gpx', 'r') as gpx_file:
         gps_route = parse_gpx_file(gpx_file)
 
-    generate_data(gps_traj, gps_route)
-    # main(gps_traj, gps_route)
+    simple_tolerance()
+    quad_tolerance()
+
