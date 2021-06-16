@@ -110,27 +110,35 @@ def recursive_subdivide(node, k):
     node.children = [x1, x2, x3, x4]
 
 def contains(x, y, w, h, points):
-   pts = []
-   for point in points:
-       if point.lon >= x and point.lon <= x+w and point.lat>=y and point.lat<=y+h:
-           pts.append(point)
-   return pts
+    """
+    Given top left coordinates (x, y), width and height of a node,
+       return points that exist in that node
+    """
+    pts = []
+    for point in points:
+        if point.lon >= x and point.lon <= x+w and point.lat>=y and point.lat<=y+h:
+            pts.append(point)
+    return pts
 
 def find_children(node):
-   if not node.children:
-       return [node]
-   else:
-       children = []
-       for child in node.children:
-           children += (find_children(child))
-   return children
+    """
+    Given root node, recursively find children, and append to list
+       Returns list of nodes in the tree
+    """
+    if not node.children:
+        return [node]
+    else:
+        children = []
+        for child in node.children:
+            children += (find_children(child))
+    return children
 
 if __name__ == '__main__':
     t0 = time.time()
 
-    k = ("depth", 5)
+    k = ("depth", 7)
     # k = ("points", 150)
-    gpx_file_location = open(f'DS/ds2.gpx', 'r')
+    gpx_file_location = open(f'../DS/ds1.gpx', 'r')
     gps_data = parse_gpx_file(gpx_file_location)
 
     points = convert_points(gps_data)
