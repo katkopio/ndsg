@@ -164,7 +164,10 @@ def simple_tolerance():
     # Generate List of Cell Numbers
     vehicle_path = generate_path(gps_traj, grid_cells)
     route_path = generate_path(gps_route, grid_cells)
-
+    
+    print(vehicle_path)
+    print(route_path)
+    print(f"OLD: {route_check(route_path, vehicle_path)}")
     print(f"LOOPS: {loop_counting(route_path, vehicle_path, grid_cells)}")
 
 def quad_tolerance():
@@ -175,7 +178,9 @@ def quad_tolerance():
     # Generate List of Cell Numbers
     vehicle_path = generate_path(gps_traj, grid_cells)
     route_path = generate_path(gps_route, grid_cells)
-
+    print(vehicle_path)
+    print(route_path)
+    print(f"OLD: {route_check(route_path, vehicle_path)}")
     print(f"LOOPS: {loop_counting(route_path, vehicle_path, grid_cells)}")
 
 def generate_simple_data(gps_traj, gps_route):

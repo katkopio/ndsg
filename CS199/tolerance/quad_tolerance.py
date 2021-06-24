@@ -113,6 +113,7 @@ def detour_info(i, r, route, traj):
     return i, r, detour, missed_route
 
 def check_siblings(detour, missed_route, grid_cells):
+    # A detour cell must be a sibling of at least one missed_route cell
     err = 0
     for d in detour:
         for r in missed_route:

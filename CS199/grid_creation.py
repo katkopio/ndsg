@@ -5,13 +5,13 @@ in simple grid map vs Quadtrees
 import pdb
 import sys
 import time
-from api import parse_gpx_file, generate_corner_pts, generate_grid_fence_2D
+from api import parse_gpx_file, generate_corner_pts, generate_grid_fence
 from quadtree import convert_points, Node, QTree, recursive_subdivide, contains, find_children
 
 def create_simple_gridmap(gpx_track, cell_size):
     # Build Simple
     point1, point2 = generate_corner_pts(gpx_track, cell_size)
-    return generate_grid_fence_2D(point1, point2, cell_size)
+    return generate_grid_fence(point1, point2, cell_size)
 
 def create_quadtree_gridmap(gps_data, k):
     points = convert_points(gps_data)
