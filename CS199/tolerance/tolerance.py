@@ -102,28 +102,19 @@ def detour_info(i, r, route, traj):
     return i, r, detour, missed_route
 
 def check_neighbors(detour, missed_route, grid_cells):
-    match = False
     err = 0
-
     for d in detour:
         for r in missed_route:
             # If grid cells are from quadtrees
             if hasattr(grid_cells[0], 'siblings') == True:
-                if grid_cells[d] in grid_cells[r].siblings:
-                    match = True 
+                if grid_cells[d] not in grid_cells[r].siblings:
+                    err = 1
                     break
-                else:
-                    match = False 
             # Else if grid cells are from simple grids
             else:
-                if d in adjacent_cells(r, grid_cells):
-                    match = True 
+                if d not in adjacent_cells(r, grid_cells):
+                    err = 1
                     break
-                else:
-                    match = False 
-        if match == False:
-            err = 1
-            break 
     return err
 
 def adjacent_cells(d, grid_cells):
@@ -187,15 +178,52 @@ def quad_tolerance():
 
     print(f"LOOPS: {loop_counting(route_path, vehicle_path, grid_cells)}")
 
+def generate_simple_data(gps_traj, gps_route):
+    loops = []
+    loops_tol = []
+    # cell_sizes = [0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95,1]
+    cell_sizes = [1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10]
+
+    for cell_size in cell_sizes:
+        grid_cells = create_simple_gridmap(gps_traj, cell_size)
+        vehicle_path = generate_path(gps_traj, grid_cells)
+        route_path = generate_path(gps_route, grid_cells)
+        loops.append(route_check(route_path, vehicle_path))
+        loops_tol.append(loop_counting(route_path, vehicle_path, grid_cells))
+
+    print(cell_size)
+    print(loops)
+    print(loops_tol)
+
+def generate_quad_data(gps_traj, gps_route):
+    loops = []
+    loops_tol = []
+    depths = [1,2,3,4,5,6,7]
+    
+    for num in depths:
+        # Create Quadtree
+        k = ("depth", num)
+        tree, grid_cells = create_quadtree_gridmap(gps_traj, k)
+        vehicle_path = generate_path(gps_traj, grid_cells)
+        route_path = generate_path(gps_route, grid_cells)
+        loops.append(route_check(route_path, vehicle_path))
+        loops_tol.append(loop_counting(route_path, vehicle_path, grid_cells))
+
+    print(depths)
+    print(loops)
+    print(loops_tol)
+
 if __name__ =='__main__':
     # Open Files
-    filename = "ds1"
+    filename = "DS7-6-0426"
     with open(f'../DS/{filename}.gpx', 'r') as gpx_file_location:
         gps_traj = parse_gpx_file(gpx_file_location)
 
-    gpx_route = "ds1_route"
+    gpx_route = "DS7_route"
     with open(f'../DS/{gpx_route}.gpx', 'r') as gpx_file:
         gps_route = parse_gpx_file(gpx_file)
 
+    # generate_simple_data(gps_traj, gps_route)
+    # generate_quad_data(gps_traj, gps_route)
     # simple_tolerance()
     # quad_tolerance()

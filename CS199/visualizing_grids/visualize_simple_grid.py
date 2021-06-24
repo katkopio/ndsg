@@ -52,5 +52,5 @@ if __name__ == '__main__':
     cell_sizes = [1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10,]
 
     for cell_size in cell_sizes:
-        grid_cells = create_simple_gridmap(gps_traj, cell_size, filename)
-        visualize_fences(grid_cells, cell_size)
+        grid_cells = create_simple_gridmap(gps_traj, cell_size)
+        visualize_fences(grid_cells, cell_size, filename)

@@ -54,7 +54,7 @@ def detour_info(i, r, route, traj):
     # Find Missing Route
     if _i == 0:
         if find_current_index(traj[i], route) == 0:
-            missed_route = [route[0]]
+            missed_route = [route[0]] 
         else:
             end_index = find_current_index(traj[i], route) + 1
             missed_route = route[0:end_index]
@@ -75,25 +75,25 @@ def detour_info(i, r, route, traj):
     return i, r, detour, missed_route
 
 def check_neighbors(detour, missed_route, grid_cells):
-    match = False
     err = 0
-
-    width = len(grid_cells[0])
-    length = len(grid_cells) * len(grid_cells[0])
-
     for d in detour:
         for r in missed_route:
-            if d in adjacent_cells(r, width, length):
-                match = True 
-                break
+            # If grid cells are from quadtrees
+            if hasattr(grid_cells[0], 'siblings') == True:
+                if grid_cells[d] not in grid_cells[r].siblings:
+                    err = 1
+                    break
+            # Else if grid cells are from simple grids
             else:
-                match = False 
-        if match == False:
-            err = 1
-            break 
+                if d not in adjacent_cells(r, grid_cells):
+                    err = 1
+                    break
     return err
 
-def adjacent_cells(d, w, l):
+def adjacent_cells(d, grid_cells):
+    w = len(grid_cells[0])
+    l = len(grid_cells) * len(grid_cells[0])
+
     # Top Left
     if d == 0:
         return [d+1, d+w, d+w+1]
