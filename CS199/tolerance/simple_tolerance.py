@@ -75,22 +75,16 @@ def detour_info(i, r, route, traj):
     return i, r, detour, missed_route
 
 def check_neighbors(detour, missed_route, grid_cells):
-    match = False
+    # A detour cell must be adjacent to at least one missed_route cell
     err = 0
-
     width = len(grid_cells[0])
     length = len(grid_cells) * len(grid_cells[0])
 
     for d in detour:
         for r in missed_route:
-            if d in adjacent_cells(r, width, length):
-                match = True 
+            if d not in adjacent_cells(r, width, length):
+                err = 1
                 break
-            else:
-                match = False 
-        if match == False:
-            err = 1
-            break 
     return err
 
 def adjacent_cells(d, w, l):
@@ -175,23 +169,27 @@ def simple_test():
  
 def main(gps_traj, gps_route):
     # Create Simple Grid Map
-    cell_size = 0.55
+    cell_size = 5.5
     grid_cells = create_simple_gridmap(gps_traj, cell_size)
 
     # Generate List of Cell Numbers
     vehicle_path = generate_path(gps_traj, grid_cells)
     route_path = generate_path(gps_route, grid_cells)
 
+    print(vehicle_path)
+    print(route_path)
+    print(f"OLD: {route_check(route_path, vehicle_path)}")
     print(f"LOOPS: {loop_counting(route_path, vehicle_path, grid_cells)}")
+    print("------------------------")
 
 if __name__ =='__main__':
     # Open Files
     filename = "ds1"
-    with open(f'../../DS/{filename}.gpx', 'r') as gpx_file_location:
+    with open(f'../DS/{filename}.gpx', 'r') as gpx_file_location:
         gps_traj = parse_gpx_file(gpx_file_location)
 
     gpx_route = "ds1_route"
-    with open(f'../../DS/{gpx_route}.gpx', 'r') as gpx_file:
+    with open(f'../DS/{gpx_route}.gpx', 'r') as gpx_file:
         gps_route = parse_gpx_file(gpx_file)
 
     generate_data(gps_traj, gps_route)

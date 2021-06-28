@@ -3,40 +3,6 @@ from api import Point, parse_gpx_file, generate_corner_pts, generate_path, route
 from quadtree import convert_points, Node, QTree, recursive_subdivide, contains, find_children
 from grid_creation import create_quadtree_gridmap
 
-def generate_quad_path(gps_data, grid_fence):
-    # Same as generate_path but instead returns list of objects, instead of list of indices
-    path = []
-    current_fence = -1
-
-    for point in gps_data:
-        pt = Point(point.get('latitude'), point.get('longitude'))
-        for i in range(len(grid_fence)):
-            if grid_fence[i].contains(pt):
-                if current_fence != i:
-                    current_fence = i 
-                    path.append(grid_fence[i])
-                    break
-    return path
-
-def substring(substring, word):
-    # Counts number of occurences of substring in string, alternate to route_check()
-    # Input:  substring("katrinakatkatrkatkat", "kat")
-    # Output: 5
-    count = 0
-    for i in range(len(word)):
-        if word[i:i+len(substring)] == substring:
-            count = count + 1
-    return count
-
-def list_slice(word, substring):
-    # Splits the word into separate words based on first character of substring
-    # Input:  list_slice("katrinakatkatrkatkat", "kat")
-    # Output: ["katrina", "kat", "katr", "kat", "kat"]
-    index = [i for i in range(len(word)) if word[i] == substring[0]]
-    index.append(len(word))
-    words = [word[index[i]:index[i+1]] for i in range(len(index)-1)]
-    return words
-
 def loop_counting(route, traj, grid_cells):
     errors = 0
     loops = 0
@@ -62,7 +28,7 @@ def loop_counting(route, traj, grid_cells):
             # "Foreign" Errors
             elif ind == -1:
                 i, r, detour, missed_route = detour_info(i, r, route, traj)
-                errors += check_siblings(detour, missed_route, grid_cells)
+                errors += check_neighbors(detour, missed_route, grid_cells)
         if r == len(route):
             r = r % len(route)
             if errors == 0:
@@ -89,7 +55,7 @@ def detour_info(i, r, route, traj):
     # Find Missing Route
     if _i == 0:
         if find_current_index(traj[i], route) == 0:
-            missed_route = [route[0]]
+            missed_route = [route[0]] 
         else:
             end_index = find_current_index(traj[i], route) + 1
             missed_route = route[0:end_index]
@@ -107,23 +73,22 @@ def detour_info(i, r, route, traj):
             else:
                 missed_route = route[start_index:end_index]
             r = find_current_index(traj[i], route) + 1
-    # print(i, r, detour, missed_route)
     return i, r, detour, missed_route
 
-def check_siblings(detour, missed_route, grid_cells):
-    match = False
+def check_neighbors(detour, missed_route, grid_cells):
     err = 0
-
     for d in detour:
         for r in missed_route:
-            if grid_cells[d] in grid_cells[r].siblings:
-                match = True 
-                break
+            # If grid cells are from quadtrees
+            if hasattr(grid_cells[0], 'siblings') == True:
+                if grid_cells[d] not in grid_cells[r].siblings:
+                    err = 1
+                    break
+            # Else if grid cells are from simple grids
             else:
-                match = False 
-        if match == False:
-            err = 1
-            break 
+                if d not in adjacent_cells(r, grid_cells):
+                    err = 1
+                    break
     return err
 
 def find_current_index(cell, route_list):

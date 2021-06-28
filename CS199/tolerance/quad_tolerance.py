@@ -113,19 +113,13 @@ def detour_info(i, r, route, traj):
     return i, r, detour, missed_route
 
 def check_siblings(detour, missed_route, grid_cells):
-    match = False
+    # A detour cell must be a sibling of at least one missed_route cell
     err = 0
-
     for d in detour:
         for r in missed_route:
-            if grid_cells[d] in grid_cells[r].siblings:
-                match = True 
+            if grid_cells[d] not in grid_cells[r].siblings:
+                err = 1
                 break
-            else:
-                match = False 
-        if match == False:
-            err = 1
-            break 
     return err
 
 def find_current_index(cell, route_list):
@@ -191,17 +185,20 @@ def main(gps_traj, gps_route):
     vehicle_path = generate_path(gps_traj, grid_cells)
     route_path = generate_path(gps_route, grid_cells)
 
+    print(vehicle_path)
+    print(route_path)
+    print(f"OLD: {route_check(route_path, vehicle_path)}")
     print(f"LOOPS: {loop_counting(route_path, vehicle_path, grid_cells)}")
 
 if __name__ =='__main__':
     # Open Files
-    filename = "DS7-6-042"
-    with open(f'../../DS/{filename}.gpx', 'r') as gpx_file_location:
+    filename = "DS7-3-0422"
+    with open(f'../DS/{filename}.gpx', 'r') as gpx_file_location:
         gps_traj = parse_gpx_file(gpx_file_location)
 
     gpx_route = "DS7_route"
-    with open(f'../../DS/{gpx_route}.gpx', 'r') as gpx_file:
+    with open(f'../DS/{gpx_route}.gpx', 'r') as gpx_file:
         gps_route = parse_gpx_file(gpx_file)
-    print(filename)
+
     generate_data(gps_traj, gps_route)
     # main(gps_traj, gps_route)
