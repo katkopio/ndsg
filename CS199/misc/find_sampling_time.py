@@ -1,8 +1,7 @@
-from pdb import set_trace
-import gpxpy.gpx
-import datetime
+from numpy import array, mean, std, ceil
+import datetime, gpxpy.gpx
 
-def find_sampling_time(gpx_file_location):
+def find_time_diff(gpx_file_location):
     """
     Calculates sampling time given a GPX file
     """
@@ -14,16 +13,39 @@ def find_sampling_time(gpx_file_location):
             for point in segment.points:
                 points.append(point.time.timestamp())
 
-    summation = 0
+    time_diff = []
     total = len(points) - 1
 
     for i in range(total):
-        summation += points[i+1] - points[i]
+        time_diff.append(points[i+1] - points[i])
 
-    return summation / total
+    return time_diff
+
+def find_sampling_time(data):
+    avg = mean(data)
+    sd = std(data)
+    return avg, sd
+
+def reject_outliers(data, m=2):
+    return data[abs(data - mean(data)) < m * std(data)]
+
+def generate_data():
+    filenames = ['DS7-1-0420', 'DS7-2-0421', 'DS7-3-0422', 'DS7-4-0424', 'DS7-5-0425', 'DS7-6-0426', 'ds1']
+    a = []
+    for file in filenames:
+        with open(f'../../DS/{file}.gpx', 'r') as gpx_file_location:
+            time_diff = find_time_diff(gpx_file_location)
+
+        data = reject_outliers(array(time_diff))
+        avg, sd = find_sampling_time(data)
+        print(ceil(avg+sd))
 
 if __name__ == '__main__':
-    with open('../DS/ds1.gpx', 'r') as gpx_file_location:
-        avg_time = find_sampling_time(gpx_file_location)
-    
-    print(f"Samples a point every {avg_time} seconds")
+    # with open('../../DS/DS7-1-0420.gpx', 'r') as gpx_file_location:
+    #     time_diff = find_time_diff(gpx_file_location)
+
+    # data = reject_outliers(array(time_diff))
+    # avg, sd = find_sampling_time(data)
+
+    # print(f"Samples a point every {avg} seconds pm {sd}")
+    generate_data()
