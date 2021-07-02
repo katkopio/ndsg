@@ -37,4 +37,4 @@ if __name__ == "__main__":
             values.append(t1-t0)
 
         avg = sum(values) / float(runs)
-        print(f'{i}0000,{avg:.6f}')
+        print(f'{i}000,{avg:.6f}')
