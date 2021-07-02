@@ -165,7 +165,7 @@ def speed_violation(gps_data, type, speed_limit, time):
                 first_point = False
                 time_elapsed = 0
             else: 
-                time_elapsed += time1.timestamp() - time0.timestamp()
+                time_elapsed += time1.timestamp() - time0.timestamp() 
 
         else:
             if sec_to_minute(time_elapsed) >= time:
