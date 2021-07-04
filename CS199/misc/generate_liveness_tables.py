@@ -30,12 +30,13 @@ def generate_latex(gps_data, time_limit, caption, label):
 if __name__ == '__main__':
     dates = ["0420", "0421", "0422", "0424", "0425", "0426"]
     filenames = [f"DS7-1-{dates[0]}", f"DS7-2-{dates[1]}", f"DS7-3-{dates[2]}", f"DS7-4-{dates[3]}", f"DS7-5-{dates[4]}", f"DS7-6-{dates[5]}", "ds1"]
+    time = [54, 29, 39, 49, 28, 45, 2]
 
     for i in range(len(filenames)):
         with open(f'../DS/{filenames[i]}.gpx', 'r') as gpx_file_location:
             gps_data = parse_gpx_file(gpx_file_location)
 
-        time_limit = 1200 if i != 6 else 2
+        time_limit = time[i]
         caption =  f"DS 2 {dates[i]} - Liveness Check" if i != 6 else "DS 1 Liveness Check"
         label = f"{dates[i]}liveness" if i != 6 else "ds1liveness"
         generate_latex(gps_data, time_limit, caption, label)
