@@ -6,13 +6,13 @@ document.getElementsByClassName('form-control-sm')[1].dispatchEvent(new Event('i
 document.getElementsByClassName('form-control-sm')[2].dispatchEvent(new Event('input'));
 document.getElementsByClassName('btn btn-outline-info')[0].click();
 
-document.getElementsByClassName('form-control-sm')[0].value = '14.513275870496644';
-document.getElementsByClassName('form-control-sm')[1].value = '120.98939957311633';
+document.getElementsByClassName('form-control-sm')[0].value = '14.51325';
+document.getElementsByClassName('form-control-sm')[1].value = '120.99068';
 document.getElementsByClassName('form-control-sm')[0].dispatchEvent(new Event('input'));
 document.getElementsByClassName('form-control-sm')[1].dispatchEvent(new Event('input'));
 document.getElementsByClassName('btn btn-outline-info')[0].click();
-document.getElementsByClassName('form-control-sm')[0].value = '14.508926778279776';
-document.getElementsByClassName('form-control-sm')[1].value = '120.99407143966094';
+document.getElementsByClassName('form-control-sm')[0].value = '14.50903';
+document.getElementsByClassName('form-control-sm')[1].value = '120.99365';
 document.getElementsByClassName('form-control-sm')[0].dispatchEvent(new Event('input'));
 document.getElementsByClassName('form-control-sm')[1].dispatchEvent(new Event('input'));
 document.getElementsByClassName('btn btn-outline-info')[0].click();
