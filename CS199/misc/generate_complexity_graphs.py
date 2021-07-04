@@ -125,4 +125,4 @@ if __name__ == '__main__':
         'label': "{fig:quad_find_children}"
     }]
 
-    generate_latex_graphs(df)
+    generate_latex_graphs(df) 
